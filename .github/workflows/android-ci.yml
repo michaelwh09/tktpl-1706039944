@@ -23,6 +23,7 @@ jobs:
           base64 -d app/keystore-decoded.txt > keystore-tktpl-proj.jks
           echo "${{secrets.KEYSTORE_PROPERTIES}}" > keystore.properties
           echo "${{secrets.GOOGLE_SERVICE}}" > app/google-services.json
+          chmod +x gradlew
       - name: Build with Gradle
         run: ./gradlew build
       - name: Archive apk generated
