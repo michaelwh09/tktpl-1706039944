@@ -13,9 +13,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        run: |
+          echo "${{secrets.KEYSTORE}}" > app/keystore-decoded.txt
+          base64 -d app/keystore-decoded.txt > keystore-tktpl-proj.jks
+          echo "${{secrets.KEYSTORE_PROPERTIES}}" > keystore.properties
+          echo "${{secrets.GOOGLE_SERVICE}}" > app/google-services.json
       - name: set up JDK 11
         uses: actions/setup-java@v1
         with:
           java-version: 11
       - name: Build with Gradle
         run: ./gradlew build
+      - name: Archive apk generated
+        uses: actions/upload-artifact@v2
+        with:
+          name: apk-generated
+          path: app/build/outputs/apk/release
