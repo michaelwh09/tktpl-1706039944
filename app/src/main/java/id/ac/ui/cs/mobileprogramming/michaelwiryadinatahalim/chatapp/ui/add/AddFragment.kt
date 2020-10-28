@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.util.hideKeyboard
@@ -14,6 +15,8 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.util.isVali
 import kotlinx.android.synthetic.main.add_fragment.*
 
 class AddFragment : Fragment() {
+
+    private val searchEmailViewModel: SearchEmailViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +40,7 @@ class AddFragment : Fragment() {
                     add_email_field?.clearFocus()
                     add_email_field.hideKeyboard()
                     add_email_input_layout.isErrorEnabled = false
+                    searchEmailViewModel.searchUserWithEmail(email)
                 } else {
                     add_email_input_layout.isErrorEnabled = true
                     add_email_input_layout.error = "Email not valid"
@@ -45,5 +49,11 @@ class AddFragment : Fragment() {
             }
             return@setOnEditorActionListener false
         }
+
+        searchEmailViewModel.user.observe(viewLifecycleOwner, {data ->
+            data?.let {
+                Log.d("AddFragment", "User: ${data["email"]}")
+            }
+        })
     }
 }
