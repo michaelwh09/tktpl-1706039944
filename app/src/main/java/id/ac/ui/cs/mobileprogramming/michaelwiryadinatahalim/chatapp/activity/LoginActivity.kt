@@ -20,7 +20,6 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
 import kotlinx.android.synthetic.main.login_activity.*
-import service.MessageFirebaseMessagingService
 
 class LoginActivity : AppCompatActivity() {
 
@@ -46,19 +45,6 @@ class LoginActivity : AppCompatActivity() {
 
     private fun loggedIn(user: FirebaseUser?) {
         if (user != null) {
-            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-                if (!task.isSuccessful) {
-                    Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                    return@OnCompleteListener
-                }
-                val token = task.result
-                val db = Firebase.firestore
-                val data = hashMapOf(
-                    "fcm_token" to token
-                )
-                db.collection("users").document(user.uid).set(data)
-                Log.d(TAG, "Token FCM: $token")
-            })
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
@@ -105,6 +91,7 @@ class LoginActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithCredential:success")
                     val user = auth.currentUser
+                    addFcmToken(user)
                     loggedIn(user)
                 } else {
                     // If sign in fails, display a message to the user.
@@ -113,5 +100,23 @@ class LoginActivity : AppCompatActivity() {
                 }
                 hideProgressBar()
             }
+    }
+
+    private fun addFcmToken(user: FirebaseUser?) {
+        if (user != null) {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                    return@OnCompleteListener
+                }
+                val token = task.result
+                val db = Firebase.firestore
+                val data = hashMapOf(
+                    "fcm_token" to token
+                )
+                db.collection("users").document(user.uid).set(data)
+                Log.d(TAG, "Token FCM: $token")
+            })
+        }
     }
 }

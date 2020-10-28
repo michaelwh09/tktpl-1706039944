@@ -1,4 +1,4 @@
-package service
+package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.service
 
 import android.util.Log
 import com.google.firebase.auth.ktx.auth
