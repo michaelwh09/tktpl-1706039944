@@ -11,21 +11,21 @@
             android:label="main fragment"
             tools:layout="@layout/first_fragment">
 
-<!--        <action-->
-<!--                android:id="@+id/action_FirstFragment_to_SecondFragment"-->
-<!--                app:destination="@id/SecondFragment"/>-->
+        <action
+                android:id="@+id/action_FirstFragment_to_AddFragment"
+                app:destination="@+id/AddFragment"/>
     </fragment>
-<!--    <fragment-->
-<!--            android:id="@+id/SecondFragment"-->
-<!--            android:name="id.ac.ui.cs.mobileprogramming.michaelwh.lab4.ui.main.SecondFragment"-->
-<!--            android:label="@string/second_fragment_label"-->
-<!--            tools:layout="@layout/fragment_second">-->
+    <fragment
+            android:id="@+id/AddFragment"
+            android:name="id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.add.AddFragment"
+            android:label="add fragment"
+            tools:layout="@layout/add_fragment">
 
-<!--        <action-->
-<!--                android:id="@+id/action_SecondFragment_to_FirstFragment"-->
-<!--                app:destination="@id/FirstFragment"-->
-<!--                app:popUpTo="@id/FirstFragment"-->
-<!--                app:popUpToInclusive="true"-->
-<!--        />-->
-<!--    </fragment>-->
+        <action
+                android:id="@+id/action_AddFragment_to_FirstFragment"
+                app:destination="@id/FirstFragment"
+                app:popUpTo="@id/FirstFragment"
+                app:popUpToInclusive="true"
+        />
+    </fragment>
 </navigation>
