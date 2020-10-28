@@ -13,10 +13,5 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
-
-        val bundle = intent.extras
-        if (bundle != null) {
-            bundle.getString("message")?.let { Log.d(TAG, it) }
-        }
     }
 }
