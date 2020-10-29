@@ -6,7 +6,7 @@
     android:id="@+id/login_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.LoginActivity">
+    tools:context=".activity.login.LoginActivity">
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/login_button"

@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import dagger.hilt.android.scopes.FragmentScoped
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.LoginRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.UserRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -17,5 +18,10 @@ object ActivityModule {
     @Provides
     fun provideFirebaseUserRepository() : UserRepository {
         return UserRepository()
+    }
+
+    @Provides
+    fun provideFirebaseLoginRepository() : LoginRepository {
+        return LoginRepository()
     }
 }

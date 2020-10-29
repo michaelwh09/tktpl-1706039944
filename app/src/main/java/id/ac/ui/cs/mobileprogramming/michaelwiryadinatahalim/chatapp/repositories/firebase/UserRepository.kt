@@ -33,6 +33,6 @@ class UserRepository {
 
         emit(State.success(user))
     }.catch {
-        emit(State.failed(it.message.toString()))
+        emit(State.failed(it))
     }.flowOn(Dispatchers.IO)
 }

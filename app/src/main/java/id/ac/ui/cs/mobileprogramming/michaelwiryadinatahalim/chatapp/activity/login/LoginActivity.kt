@@ -1,9 +1,10 @@
-package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.activity
+package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.activity.login
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -18,15 +19,21 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.AndroidEntryPoint
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.activity.MainActivity
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.State
 import kotlinx.android.synthetic.main.login_activity.*
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "LoginActivity"
         private const val RC_SIGN_IN = 9001
     }
+
+    private val loginViewModel: LoginViewModel by viewModels()
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
@@ -41,6 +48,21 @@ class LoginActivity : AppCompatActivity() {
         auth = Firebase.auth
         loggedIn(auth.currentUser)
         setContentView(R.layout.login_activity)
+        loginViewModel.authResult.observe(this, {
+            when (it) {
+                is State.Loading -> showProgressBar()
+                is State.Success -> {
+                    hideProgressBar()
+                    addFcmToken(auth.currentUser)
+                    loggedIn(auth.currentUser)
+                }
+                is State.Failed -> {
+                    Log.w(TAG, "signInWithCredential:failure", it.throwable)
+                    Snackbar.make(login_activity, "Authentication Failed.", Snackbar.LENGTH_SHORT).show()
+                }
+                is State.Initialized -> hideProgressBar()
+            }
+        })
     }
 
     private fun loggedIn(user: FirebaseUser?) {
@@ -74,32 +96,13 @@ class LoginActivity : AppCompatActivity() {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)!!
                 Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
-                firebaseAuthWithGoogle(account.idToken!!)
+                val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
+                loginViewModel.signIn(credential)
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e)
             }
         }
-    }
-
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        showProgressBar()
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.d(TAG, "signInWithCredential:success")
-                    val user = auth.currentUser
-                    addFcmToken(user)
-                    loggedIn(user)
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    Snackbar.make(login_activity, "Authentication Failed.", Snackbar.LENGTH_SHORT).show()
-                }
-                hideProgressBar()
-            }
     }
 
     private fun addFcmToken(user: FirebaseUser?) {
