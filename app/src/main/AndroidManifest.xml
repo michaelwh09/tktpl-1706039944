@@ -3,6 +3,7 @@
     package="id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp">
 
     <application
+        android:name=".ChatAppApplication"
         android:fullBackupContent="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

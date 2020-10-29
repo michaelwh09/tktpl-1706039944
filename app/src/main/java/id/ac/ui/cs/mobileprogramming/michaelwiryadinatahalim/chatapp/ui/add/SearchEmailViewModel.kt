@@ -1,52 +1,38 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.add
 
-import android.util.Log
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.functions.FirebaseFunctions
-import com.google.firebase.functions.ktx.functions
-import com.google.firebase.ktx.Firebase
+import androidx.lifecycle.viewModelScope
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.UserRepository
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.State
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 
-class SearchEmailViewModel : ViewModel() {
+@ExperimentalCoroutinesApi
+class SearchEmailViewModel @ViewModelInject constructor(
+    private val repository: UserRepository,
+) : ViewModel() {
 
-    private var functions: FirebaseFunctions = Firebase.functions("asia-southeast2")
+    private val _user = MutableLiveData<State<User>>()
+    var user: LiveData<State<User>> = _user
 
-    private val _user = MutableLiveData<HashMap<String, String>?>()
-    val user: LiveData<HashMap<String, String>?> = _user
-
-    companion object {
-        private const val TAG = "SearchEmailViewModel"
+    init {
+        _user.value = State.init()
     }
 
     fun searchUserWithEmail(email: String) {
-        getUserByEmail(email).addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                val e = task.exception
-
-                // [START_EXCLUDE]
-                Log.w(TAG, "getUserByEmail:onFailure", e)
-                return@OnCompleteListener
-                // [END_EXCLUDE]
+        _user.value = State.loading()
+        viewModelScope.launch {
+            try {
+                _user.value = State.success(repository.getUserByEmail(email))
+            } catch (e : Exception) {
+                _user.value = State.failed(e.message?: "Unknown")
             }
 
-            // [START_EXCLUDE]
-            val result = task.result
-            if (result != null) {
-                _user.value = result as HashMap<String, String>?
-            }
-        })
+        }
     }
 
-    private fun getUserByEmail(email: String): Task<HashMap<*, *>?> {
-        val data = hashMapOf(
-            "email" to email
-        )
-        return functions
-            .getHttpsCallable("getUserByEmail")
-            .call(data)
-            .continueWith { task -> task.result?.data as HashMap<*, *>? }
-    }
 }

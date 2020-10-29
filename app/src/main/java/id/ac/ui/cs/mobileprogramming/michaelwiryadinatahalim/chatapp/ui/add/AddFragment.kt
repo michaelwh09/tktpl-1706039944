@@ -9,11 +9,15 @@ import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.util.hideKeyboard
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.util.isValidEmail
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.hideKeyboard
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.isValidEmail
 import kotlinx.android.synthetic.main.add_fragment.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@AndroidEntryPoint
+@ExperimentalCoroutinesApi
 class AddFragment : Fragment() {
 
     private val searchEmailViewModel: SearchEmailViewModel by activityViewModels()
@@ -50,10 +54,8 @@ class AddFragment : Fragment() {
             return@setOnEditorActionListener false
         }
 
-        searchEmailViewModel.user.observe(viewLifecycleOwner, {data ->
-            data?.let {
-                Log.d("AddFragment", "User: ${data["email"]}")
-            }
+        searchEmailViewModel.user.observe(viewLifecycleOwner, {result ->
+            Log.d("AddFragment", result.toString())
         })
     }
 }

@@ -1,4 +1,4 @@
-package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.util
+package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils
 
 import android.content.Context
 import android.util.Patterns
