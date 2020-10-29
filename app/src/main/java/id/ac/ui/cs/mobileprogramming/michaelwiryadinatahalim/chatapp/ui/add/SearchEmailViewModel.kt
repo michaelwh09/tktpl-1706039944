@@ -9,6 +9,8 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.UserRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.State
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
@@ -19,20 +21,18 @@ class SearchEmailViewModel @ViewModelInject constructor(
     private val _user = MutableLiveData<State<User>>()
     var user: LiveData<State<User>> = _user
 
+    private var job: Job? = null
+
     init {
         _user.value = State.init()
     }
 
     fun searchUserWithEmail(email: String) {
-        _user.value = State.loading()
-        viewModelScope.launch {
-            try {
-                _user.value = State.success(repository.getUserByEmail(email))
-            } catch (e : Exception) {
-                _user.value = State.failed(e.message?: "Unknown")
+        job?.cancel()
+        job = viewModelScope.launch {
+            repository.getUserByEmail(email).collect {
+                _user.value = it
             }
-
         }
     }
-
 }

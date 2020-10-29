@@ -4,7 +4,13 @@ import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.State
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import kotlinx.serialization.json.Json
 
@@ -12,7 +18,8 @@ import kotlinx.serialization.json.Json
 class UserRepository {
     private var functions: FirebaseFunctions = Firebase.functions("asia-southeast2")
 
-    suspend fun getUserByEmail(email : String): User {
+    fun getUserByEmail(email : String): Flow<State<User>> = flow {
+        emit(State.loading())
         val data = hashMapOf(
             "email" to email
         )
@@ -22,6 +29,10 @@ class UserRepository {
             .continueWith { task -> task.result?.data as String }
             .await()
 
-        return Json{ignoreUnknownKeys = true}.decodeFromString(User.serializer(), userString)
-    }
+        val user = Json{ignoreUnknownKeys = true}.decodeFromString(User.serializer(), userString)
+
+        emit(State.success(user))
+    }.catch {
+        emit(State.failed(it.message.toString()))
+    }.flowOn(Dispatchers.IO)
 }
