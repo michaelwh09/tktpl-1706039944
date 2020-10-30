@@ -12,6 +12,7 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositorie
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.LoginRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.UserFirestoreRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.State
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -34,13 +35,13 @@ class LoginViewModel @ViewModelInject constructor(
 
     fun signIn(credential: AuthCredential) {
         job?.cancel()
-        job = viewModelScope.launch {
+        job = viewModelScope.launch(Dispatchers.IO) {
             loginRepository.signInWithCredentialGoogle(credential).collect {
                 when (it) {
                     is State.Success -> {
                         getFcmToken(it)
                     }
-                    else -> _authResult.value = it
+                    else -> _authResult.postValue(it)
                 }
             }
         }
@@ -54,12 +55,12 @@ class LoginViewModel @ViewModelInject constructor(
                     is State.Success -> {
                         saveTokenToFirestore(it, user, authResult)
                     }
-                    is State.Failed -> _authResult.value = State.failed(it.throwable)
+                    is State.Failed -> _authResult.postValue(State.failed(it.throwable))
                     else -> {}
                 }
             }
         } else {
-            _authResult.value = State.failed(RuntimeException("User null"))
+            _authResult.postValue(State.failed(RuntimeException("User null")))
         }
     }
 
@@ -71,9 +72,9 @@ class LoginViewModel @ViewModelInject constructor(
         userFirestoreRepository.addTokenToUserFirestore(it1.data, user).collect {
             when (it) {
                 is State.Success -> {
-                    _authResult.value = authResult
+                    _authResult.postValue(authResult)
                 }
-                is State.Failed -> _authResult.value = State.failed(it.throwable)
+                is State.Failed -> _authResult.postValue(State.failed(it.throwable))
                 else -> {}
             }
         }

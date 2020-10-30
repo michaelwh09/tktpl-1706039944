@@ -45,26 +45,22 @@ class AddFriendViewModel
         _added.value = true
         jobInsert?.cancel()
         jobInsert = viewModelScope.launch(Dispatchers.IO) {
-            try {
-                friendRepository.addFriend(user)
-            } catch (e: Exception) {
-                Log.d(TAG, e.message?: "unknown")
-            }
+            friendRepository.addFriend(user)
         }
     }
 
     fun searchUserWithEmail(email: String) {
         job?.cancel()
-        job = viewModelScope.launch {
+        job = viewModelScope.launch(Dispatchers.IO) {
             searchUserWithEmailDb(email)
         }
     }
 
     private suspend fun searchUserWithEmailDb(email: String) {
         friendRepository.getFriendByEmail(email).collect {
-            _added.value = it != null
+            _added.postValue(it != null)
             if (it != null) {
-                _user.value = State.success(it)
+                _user.postValue(State.success(it))
             } else {
                 searchUserWithEmailFirebase(email)
             }
@@ -73,7 +69,7 @@ class AddFriendViewModel
 
     private suspend fun searchUserWithEmailFirebase(email: String) {
         repository.getUserByEmail(email).collect {
-            _user.value = it
+            _user.postValue(it)
         }
     }
 }
