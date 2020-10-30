@@ -28,4 +28,11 @@
                 app:popUpToInclusive="true"
         />
     </fragment>
+
+    <fragment
+        android:id="@+id/RoomFragment"
+        android:name="id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.room.RoomFragment"
+        android:label="room fragment"
+        tools:layout="@layout/room_fragment">
+    </fragment>
 </navigation>

@@ -15,7 +15,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 @Module
 @InstallIn(ActivityRetainedComponent::class)
-object ActivityModule {
+object FirebaseModule {
 
     @Provides
     fun provideFirebaseUserRepository() : UserRepository {
