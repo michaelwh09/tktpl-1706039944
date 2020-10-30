@@ -1,5 +1,6 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db
 
+import androidx.paging.PagingSource
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.FriendDao
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
 import kotlinx.coroutines.flow.Flow
@@ -9,7 +10,7 @@ class FriendRepository @Inject constructor(
     private val friendDao: FriendDao
 ): IFriendRepository {
 
-    override fun getAllAddedFriends(): Flow<List<User>> {
+    override fun getAllAddedFriends(): PagingSource<Int, User> {
         return friendDao.getAllFriends()
     }
 

@@ -1,5 +1,6 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -9,8 +10,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FriendDao {
 
-    @Query("SELECT * FROM user_table")
-    fun getAllFriends(): Flow<List<User>>
+    @Query("SELECT * FROM user_table ORDER BY display_name DESC")
+    fun getAllFriends(): PagingSource<Int, User>
 
     @Insert
     fun insertAll(vararg users: User)

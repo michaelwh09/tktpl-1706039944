@@ -3,11 +3,13 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/first_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.main.FirstFragment">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_first"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -21,15 +23,14 @@
         />
 
     </com.google.android.material.appbar.AppBarLayout>
-    <TextView
-            android:id="@+id/message_counter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello world"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_friends"
+        android:layout_width="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/appbar_first"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add"
@@ -40,5 +41,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="30dp"
         app:srcCompat="@drawable/ic_baseline_add_24"/>
+
+    <ProgressBar
+        android:id="@+id/friends_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
