@@ -12,9 +12,6 @@ import kotlinx.android.synthetic.main.first_fragment.*
 
 class FirstFragment : Fragment() {
 
-    private val model: FirstViewModel by activityViewModels()
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,9 +25,5 @@ class FirstFragment : Fragment() {
         fab_add.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_AddFragment)
         }
-
-        model.counterData.observe(viewLifecycleOwner, {counter ->
-            message_counter.text = counter.toString()
-        })
     }
 }

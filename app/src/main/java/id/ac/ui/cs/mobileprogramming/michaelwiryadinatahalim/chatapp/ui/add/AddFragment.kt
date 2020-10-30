@@ -26,7 +26,7 @@ class AddFragment : Fragment() {
         private const val TAG = "AddFragment"
     }
 
-    private val searchEmailViewModel: SearchEmailViewModel by activityViewModels()
+    private val addFriendViewModel: AddFriendViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,7 +70,7 @@ class AddFragment : Fragment() {
                     add_email_field?.clearFocus()
                     add_email_field.hideKeyboard()
                     add_email_input_layout.isErrorEnabled = false
-                    searchEmailViewModel.searchUserWithEmail(email)
+                    addFriendViewModel.searchUserWithEmail(email)
                 } else {
                     add_email_input_layout.isErrorEnabled = true
                     add_email_input_layout.error = "Email not valid"
@@ -80,9 +80,22 @@ class AddFragment : Fragment() {
             return@setOnEditorActionListener false
         }
 
-        searchEmailViewModel.user.observe(viewLifecycleOwner, {
+        addFriendViewModel.added.observe(viewLifecycleOwner, {
+            if (it) {
+                add_friend_button.visibility = View.INVISIBLE
+            } else {
+                add_friend_button.visibility = View.VISIBLE
+            }
+        })
+
+        addFriendViewModel.user.observe(viewLifecycleOwner, {
             when (it) {
-                is State.Success -> showFriendCard(it.data)
+                is State.Success -> {
+                    showFriendCard(it.data)
+                    add_friend_button.setOnClickListener { _ ->
+                        addFriendViewModel.addUserToFriend(it.data)
+                    }
+                }
                 is State.Loading -> showLoading()
                 is State.Failed -> {
                     hideLoading()
