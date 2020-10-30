@@ -11,6 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.State
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.hideKeyboard
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.isValidEmail
 import kotlinx.android.synthetic.main.add_fragment.*
@@ -20,6 +22,10 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 class AddFragment : Fragment() {
 
+    companion object {
+        private const val TAG = "AddFragment"
+    }
+
     private val searchEmailViewModel: SearchEmailViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -27,6 +33,26 @@ class AddFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.add_fragment, container, false)
+    }
+
+    private fun showLoading() {
+        hideFriendCard()
+        add_friend_progress_bar.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        add_friend_progress_bar.visibility = View.INVISIBLE
+    }
+
+    private fun showFriendCard(user: User) {
+        friend_name.text = user.displayName
+        friend_email.text = user.email
+        hideLoading()
+        card_friend.visibility = View.VISIBLE
+    }
+
+    private fun hideFriendCard() {
+        card_friend.visibility = View.INVISIBLE
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,8 +80,16 @@ class AddFragment : Fragment() {
             return@setOnEditorActionListener false
         }
 
-        searchEmailViewModel.user.observe(viewLifecycleOwner, {result ->
-            Log.d("AddFragment", result.toString())
+        searchEmailViewModel.user.observe(viewLifecycleOwner, {
+            when (it) {
+                is State.Success -> showFriendCard(it.data)
+                is State.Loading -> showLoading()
+                is State.Failed -> {
+                    hideLoading()
+                    Log.d(TAG, it.throwable.message?: "unknown")
+                }
+                is State.Initialized -> hideLoading()
+            }
         })
     }
 }

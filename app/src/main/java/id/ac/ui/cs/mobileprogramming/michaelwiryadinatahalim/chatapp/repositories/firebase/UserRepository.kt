@@ -26,9 +26,13 @@ class UserRepository {
         val userString = functions
             .getHttpsCallable("getUserByEmail")
             .call(data)
-            .continueWith { task -> task.result?.data as String }
+            .continueWith { task -> task.result?.data as String? }
             .await()
 
+        if (userString == null) {
+            emit(State.failed(RuntimeException("User not found")))
+            return@flow
+        }
         val user = Json{ignoreUnknownKeys = true}.decodeFromString(User.serializer(), userString)
 
         emit(State.success(user))

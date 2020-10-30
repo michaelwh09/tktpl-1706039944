@@ -70,12 +70,12 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showProgressBar() {
         login_button.visibility = View.INVISIBLE
-        indeterminateBarLogin.visibility = View.VISIBLE
+        loginProgressBar.visibility = View.VISIBLE
     }
 
     private fun hideProgressBar() {
         login_button.visibility = View.VISIBLE
-        indeterminateBarLogin.visibility = View.INVISIBLE
+        loginProgressBar.visibility = View.INVISIBLE
     }
 
     fun signIn(view: View?) {
