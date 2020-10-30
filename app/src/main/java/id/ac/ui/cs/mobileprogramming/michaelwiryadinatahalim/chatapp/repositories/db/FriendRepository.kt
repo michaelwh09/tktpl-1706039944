@@ -1,6 +1,5 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db
 
-import android.util.Log
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.FriendDao
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
 import kotlinx.coroutines.flow.Flow
