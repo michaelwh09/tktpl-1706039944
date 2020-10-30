@@ -13,20 +13,7 @@
 
         <action
                 android:id="@+id/action_FirstFragment_to_AddFragment"
-                app:destination="@+id/AddFragment"/>
-    </fragment>
-    <fragment
-            android:id="@+id/AddFragment"
-            android:name="id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.add.AddFragment"
-            android:label="add fragment"
-            tools:layout="@layout/add_fragment">
-
-        <action
-                android:id="@+id/action_AddFragment_to_FirstFragment"
-                app:destination="@id/FirstFragment"
-                app:popUpTo="@id/FirstFragment"
-                app:popUpToInclusive="true"
-        />
+                app:destination="@id/navigation_add_friend"/>
     </fragment>
 
     <fragment
@@ -35,4 +22,19 @@
         android:label="room fragment"
         tools:layout="@layout/room_fragment">
     </fragment>
+    <navigation android:id="@+id/navigation_add_friend"
+        app:startDestination="@id/AddFragment">
+        <fragment
+            android:id="@+id/AddFragment"
+            android:name="id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.add.AddFragment"
+            android:label="add fragment"
+            tools:layout="@layout/add_fragment">
+
+            <action
+                android:id="@+id/action_AddFragment_to_FirstFragment"
+                app:destination="@id/FirstFragment"
+                app:popUpTo="@id/FirstFragment"
+                app:popUpToInclusive="true" />
+        </fragment>
+    </navigation>
 </navigation>

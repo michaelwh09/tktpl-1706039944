@@ -9,6 +9,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
@@ -26,7 +27,9 @@ class AddFragment : Fragment() {
         private const val TAG = "AddFragment"
     }
 
-    private val addFriendViewModel: AddFriendViewModel by activityViewModels()
+    private val addFriendViewModel: AddFriendViewModel by navGraphViewModels(R.id.navigation_add_friend) {
+        defaultViewModelProviderFactory
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

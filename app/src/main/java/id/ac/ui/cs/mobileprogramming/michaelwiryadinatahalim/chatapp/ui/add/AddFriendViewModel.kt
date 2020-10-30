@@ -62,7 +62,6 @@ class AddFriendViewModel
 
     private suspend fun searchUserWithEmailDb(email: String) {
         friendRepository.getFriendByEmail(email).collect {
-            Log.d(TAG, "Masuk1")
             _added.value = it != null
             if (it != null) {
                 _user.value = State.success(it)
