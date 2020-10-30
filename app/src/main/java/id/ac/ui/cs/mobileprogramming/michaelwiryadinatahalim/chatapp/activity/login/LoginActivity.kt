@@ -10,15 +10,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.activity.MainActivity
@@ -53,7 +50,6 @@ class LoginActivity : AppCompatActivity() {
                 is State.Loading -> showProgressBar()
                 is State.Success -> {
                     hideProgressBar()
-                    addFcmToken(auth.currentUser)
                     loggedIn(auth.currentUser)
                 }
                 is State.Failed -> {
@@ -102,24 +98,6 @@ class LoginActivity : AppCompatActivity() {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG, "Google sign in failed", e)
             }
-        }
-    }
-
-    private fun addFcmToken(user: FirebaseUser?) {
-        if (user != null) {
-            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-                if (!task.isSuccessful) {
-                    Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                    return@OnCompleteListener
-                }
-                val token = task.result
-                val db = Firebase.firestore
-                val data = hashMapOf(
-                    "fcm_token" to token
-                )
-                db.collection("users").document(user.uid).set(data)
-                Log.d(TAG, "Token FCM: $token")
-            })
         }
     }
 }

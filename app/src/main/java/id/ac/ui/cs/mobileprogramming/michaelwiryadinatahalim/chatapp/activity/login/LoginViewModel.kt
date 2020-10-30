@@ -7,14 +7,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseUser
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.FcmRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.LoginRepository
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.UserFirestoreRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.State
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class LoginViewModel @ViewModelInject constructor(
-    private val repository: LoginRepository
+    private val loginRepository: LoginRepository,
+    private val fcmRepository: FcmRepository,
+    private val userFirestoreRepository: UserFirestoreRepository
 ) : ViewModel() {
 
     private val _authResult = MutableLiveData<State<AuthResult>>()
@@ -30,9 +35,48 @@ class LoginViewModel @ViewModelInject constructor(
     fun signIn(credential: AuthCredential) {
         job?.cancel()
         job = viewModelScope.launch {
-            repository.signInWithCredentialGoogle(credential).collect {
-                _authResult.value = it
+            loginRepository.signInWithCredentialGoogle(credential).collect {
+                when (it) {
+                    is State.Success -> {
+                        getFcmToken(it)
+                    }
+                    else -> _authResult.value = it
+                }
+            }
+        }
+    }
+
+    private suspend fun getFcmToken(authResult: State.Success<AuthResult>) {
+        val user = authResult.data.user
+        if (user != null) {
+            fcmRepository.getFcmToken().collect {
+                when (it) {
+                    is State.Success -> {
+                        saveTokenToFirestore(it, user, authResult)
+                    }
+                    is State.Failed -> _authResult.value = State.failed(it.throwable)
+                    else -> {}
+                }
+            }
+        } else {
+            _authResult.value = State.failed(RuntimeException("User null"))
+        }
+    }
+
+    private suspend fun saveTokenToFirestore(
+        it1: State.Success<String>,
+        user: FirebaseUser,
+        authResult: State.Success<AuthResult>
+    ) {
+        userFirestoreRepository.addTokenToUserFirestore(it1.data, user).collect {
+            when (it) {
+                is State.Success -> {
+                    _authResult.value = authResult
+                }
+                is State.Failed -> _authResult.value = State.failed(it.throwable)
+                else -> {}
             }
         }
     }
 }
+
