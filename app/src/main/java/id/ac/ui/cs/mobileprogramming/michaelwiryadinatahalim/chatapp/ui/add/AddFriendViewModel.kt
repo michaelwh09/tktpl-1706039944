@@ -1,6 +1,5 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.add
 
-import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
