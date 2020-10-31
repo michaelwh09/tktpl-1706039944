@@ -18,16 +18,14 @@ import kotlinx.coroutines.launch
 
 class FirstFragment : Fragment() {
 
+    private val friendsViewModel: FriendsViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         return inflater.inflate(R.layout.first_fragment, container, false)
     }
-
-    private val friendsViewModel: FriendsViewModel by activityViewModels()
-
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

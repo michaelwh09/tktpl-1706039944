@@ -18,9 +18,9 @@ class FriendsViewModel @ViewModelInject constructor(
 
     val friends: Flow<PagingData<User>> = Pager(
         PagingConfig(
-            pageSize = 40,
+            pageSize = 30,
             enablePlaceholders = true,
-            maxSize = 200
+            maxSize = 100
         )
     ) {
         friendRepository.getAllAddedFriends()
