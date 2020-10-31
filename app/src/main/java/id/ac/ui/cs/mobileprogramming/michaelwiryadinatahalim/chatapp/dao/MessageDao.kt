@@ -8,6 +8,6 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.Messa
 @Dao
 interface MessageDao {
 
-    @Query("SELECT * FROM message_table ORDER BY timestamp DESC")
+    @Query("SELECT * FROM message_table WHERE room_chat_uid == :roomUid ORDER BY timestamp DESC")
     fun getAllMessagesByRoomUid(roomUid: Int) : PagingSource<Int, Message>
 }

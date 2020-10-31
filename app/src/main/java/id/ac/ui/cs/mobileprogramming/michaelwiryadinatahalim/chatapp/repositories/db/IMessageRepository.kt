@@ -6,4 +6,5 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.Messa
 interface IMessageRepository {
 
     fun getAllMessagesByRoomUid(roomUid: Int) : PagingSource<Int, Message>
+
 }

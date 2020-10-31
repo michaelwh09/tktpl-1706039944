@@ -2,10 +2,11 @@ package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositori
 
 import androidx.paging.PagingSource
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChat
 import kotlinx.coroutines.flow.Flow
 
 interface IFriendRepository {
-    fun getAllAddedFriends() : PagingSource<Int, User>
+    fun getAllAddedFriends() : PagingSource<Int, UserAndRoomChat>
 
     fun addFriend(vararg friends: User)
 

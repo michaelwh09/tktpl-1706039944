@@ -4,11 +4,11 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 data class UserAndRoomChat(
-    @Embedded val roomChat: RoomChat,
+    @Embedded val user: User,
 
     @Relation(
         parentColumn = "uid",
-        entityColumn = "room_uid"
+        entityColumn = "user_uid"
     )
-    val user: User?
+    val roomChat: RoomChat?
 )

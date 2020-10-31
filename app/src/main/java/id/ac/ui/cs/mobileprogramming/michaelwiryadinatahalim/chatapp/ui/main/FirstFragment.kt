@@ -14,16 +14,18 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChat
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.RecyclerViewOnClickListener
 import kotlinx.android.synthetic.main.first_fragment.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class FirstFragment : Fragment(), RecyclerViewOnClickListener<User> {
+class FirstFragment : Fragment(), RecyclerViewOnClickListener<UserAndRoomChat> {
 
     private val friendsViewModel: FriendsViewModel by activityViewModels()
+
+    private val friendRoomViewModel: FriendRoomViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,15 +56,31 @@ class FirstFragment : Fragment(), RecyclerViewOnClickListener<User> {
         fab_add.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_AddFragment)
         }
+
+        friendRoomViewModel.roomUid.observe(viewLifecycleOwner, {
+            if (it != null) {
+                navigateToChatRoom(it)
+            }
+        })
     }
 
-    override fun onItemClicked(view: View, data: User) {
+    private fun navigateToChatRoom(roomUid: Long) {
+        val action = FirstFragmentDirections.actionFirstFragmentToChat(roomUid)
+        findNavController().navigate(action)
+    }
+
+    override fun onItemClicked(view: View, data: UserAndRoomChat) {
         context?.let {
             MaterialAlertDialogBuilder(it)
-                .setTitle(data.displayName)
-                .setMessage(data.email)
+                .setTitle(data.user.displayName)
+                .setMessage(data.user.email)
                 .setPositiveButton("Chat") { dialog, _ ->
                     dialog.dismiss()
+                    if (data.roomChat == null) {
+                        friendRoomViewModel.createNewRoomForUser(data.user.uid)
+                        return@setPositiveButton
+                    }
+                    navigateToChatRoom(data.roomChat.uid)
                 }
                 .setNegativeButton("Close") { dialog, _ ->
                     dialog.dismiss()

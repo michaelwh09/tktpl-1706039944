@@ -6,4 +6,6 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserA
 interface IRoomChatRepository {
 
     fun getAllRoomsChat() : PagingSource<Int, UserAndRoomChat>
+
+    fun createSingleEmptyRoom(userUid: String) : Long
 }

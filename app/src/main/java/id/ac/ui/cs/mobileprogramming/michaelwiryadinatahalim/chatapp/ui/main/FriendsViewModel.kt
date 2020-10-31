@@ -8,6 +8,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChat
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IFriendRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -15,7 +16,7 @@ class FriendsViewModel @ViewModelInject constructor(
     private val friendRepository: IFriendRepository
 ) : ViewModel() {
 
-    val friends: Flow<PagingData<User>> = Pager(
+    val friends: Flow<PagingData<UserAndRoomChat>> = Pager(
         PagingConfig(
             pageSize = 30,
             enablePlaceholders = true,
