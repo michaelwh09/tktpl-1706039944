@@ -10,6 +10,6 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserA
 interface RoomChatDao {
 
     @Transaction
-    @Query("SELECT U.* FROM user_table AS U INNER JOIN room_chat_table AS R ON U.uid = R.user_uid ORDER BY R.last_message_timestamp DESC")
+    @Query("SELECT * FROM room_chat_table ORDER BY last_message_timestamp DESC")
     fun getAllRoomsChatAndFriend() : PagingSource<Int, UserAndRoomChat>
 }
