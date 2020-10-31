@@ -6,6 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.FriendRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IFriendRepository
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IRoomChatRepository
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.RoomChatRepository
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
@@ -13,4 +15,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindFriendRepository(friendRepository: FriendRepository): IFriendRepository
+
+    @Binds
+    abstract fun bindRoomChatRepository(roomChatRepository: RoomChatRepository): IRoomChatRepository
 }
