@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
@@ -39,22 +40,22 @@ class AddFragment : Fragment() {
 
     private fun showLoading() {
         hideFriendCard()
-        add_friend_progress_bar.visibility = View.VISIBLE
+        add_friend_progress_bar.isVisible = true
     }
 
     private fun hideLoading() {
-        add_friend_progress_bar.visibility = View.INVISIBLE
+        add_friend_progress_bar.isVisible = false
     }
 
     private fun showFriendCard(user: User) {
         friend_name.text = user.displayName
         friend_email.text = user.email
         hideLoading()
-        card_friend.visibility = View.VISIBLE
+        card_friend.isVisible = true
     }
 
     private fun hideFriendCard() {
-        card_friend.visibility = View.INVISIBLE
+        card_friend.isVisible = false
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,11 +84,7 @@ class AddFragment : Fragment() {
         }
 
         addFriendViewModel.added.observe(viewLifecycleOwner, {
-            if (it) {
-                add_friend_button.visibility = View.INVISIBLE
-            } else {
-                add_friend_button.visibility = View.VISIBLE
-            }
+            add_friend_button.isVisible = !it
         })
 
         addFriendViewModel.user.observe(viewLifecycleOwner, {

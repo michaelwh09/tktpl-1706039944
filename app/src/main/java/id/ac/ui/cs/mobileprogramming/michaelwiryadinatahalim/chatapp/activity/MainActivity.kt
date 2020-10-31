@@ -2,6 +2,7 @@ package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +21,12 @@ class MainActivity : AppCompatActivity() {
     private fun setUpNavigation() {
         val navFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
         if (navFragment != null) {
-            NavigationUI.setupWithNavController(bottomNavigation, navFragment.findNavController())
+            val navController = navFragment.findNavController()
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                bottomNavigation.isVisible = (destination.id == R.id.first_fragment
+                        || destination.id == R.id.room_fragment)
+            }
+            NavigationUI.setupWithNavController(bottomNavigation, navController)
         }
     }
 }
