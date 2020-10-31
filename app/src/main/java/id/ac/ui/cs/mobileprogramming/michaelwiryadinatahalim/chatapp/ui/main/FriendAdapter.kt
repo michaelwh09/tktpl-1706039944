@@ -28,7 +28,7 @@ class FriendAdapter : PagingDataAdapter<UserAndRoomChat, FriendAdapter.FriendVie
         fun bindTo(user: UserAndRoomChat?, itemClickListener: RecyclerViewOnClickListener<UserAndRoomChat>?) {
             friend = user
             nameView.text = friend?.user?.displayName
-            nameView.setOnClickListener {
+            itemView.setOnClickListener {
                 friend?.let { friend -> itemClickListener?.onItemClicked(it, friend) }
             }
         }

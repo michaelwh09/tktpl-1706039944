@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChat
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.RecyclerViewOnClickListener
 
 class RoomChatAdapter: PagingDataAdapter<UserAndRoomChat, RoomChatAdapter.RoomChatViewHolder>(diffCallback) {
 
@@ -19,7 +20,7 @@ class RoomChatAdapter: PagingDataAdapter<UserAndRoomChat, RoomChatAdapter.RoomCh
         private val lastMessageTimestamp = itemView.findViewById<TextView>(R.id.last_message_timestamp)
         private var userAndRoomChat: UserAndRoomChat? = null
 
-        fun bindTo(user: UserAndRoomChat?) {
+        fun bindTo(user: UserAndRoomChat?, itemClickListener: RecyclerViewOnClickListener<UserAndRoomChat>?) {
             userAndRoomChat = user
             nameView.text = userAndRoomChat?.user?.displayName
             lastMessage.text = userAndRoomChat?.roomChat?.lastMessage?: ""
@@ -27,11 +28,16 @@ class RoomChatAdapter: PagingDataAdapter<UserAndRoomChat, RoomChatAdapter.RoomCh
                 lastMessageTimestamp.text = java.time.format.DateTimeFormatter.ISO_INSTANT
                     .format(java.time.Instant.ofEpochSecond(it))
             }
+            itemView.setOnClickListener {
+                userAndRoomChat?.let { roomChat -> itemClickListener?.onItemClicked(it, roomChat) }
+            }
         }
     }
 
+    var itemClickListener: RecyclerViewOnClickListener<UserAndRoomChat>? = null
+
     override fun onBindViewHolder(holder: RoomChatViewHolder, position: Int) {
-        holder.bindTo(getItem(position))
+        holder.bindTo(getItem(position), itemClickListener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RoomChatViewHolder =

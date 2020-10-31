@@ -8,17 +8,19 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.navArgs
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChat
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.RecyclerViewOnClickListener
 import kotlinx.android.synthetic.main.room_fragment.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class RoomFragment : Fragment() {
+class RoomFragment : Fragment(), RecyclerViewOnClickListener<UserAndRoomChat> {
 
     private val roomsChatViewModel: RoomsChatViewModel by activityViewModels()
 
@@ -47,5 +49,13 @@ class RoomFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onItemClicked(view: View, data: UserAndRoomChat) {
+        data.roomChat?.uid?.let {
+            val action = RoomFragmentDirections.actionRoomFragmentToChat(it)
+            findNavController().navigate(action)
+        }
+
     }
 }
