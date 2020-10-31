@@ -56,12 +56,6 @@ class FirstFragment : Fragment(), RecyclerViewOnClickListener<UserAndRoomChat> {
         fab_add.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_AddFragment)
         }
-
-        friendRoomViewModel.roomUid.observe(viewLifecycleOwner, {
-            if (it != null) {
-                navigateToChatRoom(it)
-            }
-        })
     }
 
     private fun navigateToChatRoom(roomUid: Long) {
@@ -78,6 +72,11 @@ class FirstFragment : Fragment(), RecyclerViewOnClickListener<UserAndRoomChat> {
                     dialog.dismiss()
                     if (data.roomChat == null) {
                         friendRoomViewModel.createNewRoomForUser(data.user.uid)
+                        friendRoomViewModel.roomUid.observe(viewLifecycleOwner, { roomUid ->
+                            if (roomUid != null) {
+                                navigateToChatRoom(roomUid)
+                            }
+                        })
                         return@setPositiveButton
                     }
                     navigateToChatRoom(data.roomChat.uid)

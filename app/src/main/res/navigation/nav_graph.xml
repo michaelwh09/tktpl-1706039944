@@ -69,17 +69,6 @@
                 android:defaultValue="0L"
                 app:argType="long" />
 
-            <action
-                android:id="@+id/action_ChatFragment_to_FirstFragment"
-                app:destination="@id/FirstFragment"
-                app:popUpTo="@id/FirstFragment"
-                app:popUpToInclusive="true" />
-
-            <action
-                android:id="@+id/action_ChatFragment_to_RoomFragment"
-                app:destination="@id/RoomFragment"
-                app:popUpTo="@id/RoomFragment"
-                app:popUpToInclusive="true" />
         </fragment>
     </navigation>
 </navigation>
