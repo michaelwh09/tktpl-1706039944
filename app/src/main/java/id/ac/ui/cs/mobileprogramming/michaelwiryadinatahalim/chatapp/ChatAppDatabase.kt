@@ -8,7 +8,7 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.Messa
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.RoomChat
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
 
-@Database(entities = [User::class, RoomChat::class, Message::class], version = 1)
+@Database(entities = [User::class, RoomChat::class, Message::class], version = 1, exportSchema = false)
 abstract class ChatAppDatabase : RoomDatabase() {
 
     abstract fun friendDao() : FriendDao

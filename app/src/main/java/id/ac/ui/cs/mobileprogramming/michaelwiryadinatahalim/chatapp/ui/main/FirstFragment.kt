@@ -1,5 +1,6 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.main
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,13 +11,16 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.RecyclerViewOnClickListener
 import kotlinx.android.synthetic.main.first_fragment.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class FirstFragment : Fragment() {
+class FirstFragment : Fragment(), RecyclerViewOnClickListener<User> {
 
     private val friendsViewModel: FriendsViewModel by activityViewModels()
 
@@ -30,6 +34,7 @@ class FirstFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val friendAdapter = FriendAdapter()
+        friendAdapter.itemClickListener = this
         rv_friends.adapter = friendAdapter
         viewLifecycleOwner.lifecycleScope.launch {
             friendsViewModel.friends.collectLatest {
@@ -47,6 +52,21 @@ class FirstFragment : Fragment() {
         }
         fab_add.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_AddFragment)
+        }
+    }
+
+    override fun onItemClicked(view: View, data: User) {
+        context?.let {
+            MaterialAlertDialogBuilder(it)
+                .setTitle(data.displayName)
+                .setMessage(data.email)
+                .setPositiveButton("Chat") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Close") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
         }
     }
 }

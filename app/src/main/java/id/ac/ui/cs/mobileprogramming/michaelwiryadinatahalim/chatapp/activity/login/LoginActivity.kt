@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -27,7 +29,6 @@ class LoginActivity : AppCompatActivity() {
 
     companion object {
         private const val TAG = "LoginActivity"
-        private const val RC_SIGN_IN = 9001
     }
 
     private val loginViewModel: LoginViewModel by viewModels()
@@ -78,16 +79,11 @@ class LoginActivity : AppCompatActivity() {
         loginProgressBar.visibility = View.INVISIBLE
     }
 
-    fun signIn(view: View?) {
-        val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+    private val signInResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        result: ActivityResult ->
+        if (result.resultCode == RESULT_OK) {
+            val intent = result.data
+            val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)!!
@@ -99,5 +95,10 @@ class LoginActivity : AppCompatActivity() {
                 Log.w(TAG, "Google sign in failed", e)
             }
         }
+    }
+
+    fun signIn(view: View?) {
+        val signInIntent = googleSignInClient.signInIntent
+        signInResult.launch(signInIntent)
     }
 }
