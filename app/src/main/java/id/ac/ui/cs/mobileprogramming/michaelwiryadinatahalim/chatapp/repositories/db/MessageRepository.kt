@@ -9,7 +9,7 @@ class MessageRepository @Inject constructor(
     private val messageDao: MessageDao
 ): IMessageRepository {
 
-    override fun getAllMessagesByRoomUid(roomUid: Int): PagingSource<Int, Message> {
+    override fun getAllMessagesByRoomUid(roomUid: Long): PagingSource<Int, Message> {
         return messageDao.getAllMessagesByRoomUid(roomUid)
     }
 

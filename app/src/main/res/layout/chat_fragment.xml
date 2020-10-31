@@ -26,7 +26,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_rooms_chat"
+        android:id="@+id/rv_chat_message"
         android:layout_width="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/appbar_chat"
@@ -34,7 +34,7 @@
         android:layout_height="0dp" />
 
     <ProgressBar
-        android:id="@+id/rooms_chat_progress_bar"
+        android:id="@+id/message_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

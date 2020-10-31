@@ -34,6 +34,7 @@ class RoomFragment : Fragment(), RecyclerViewOnClickListener<UserAndRoomChat> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val roomChatAdapter = RoomChatAdapter()
+        roomChatAdapter.itemClickListener = this
         rv_rooms_chat.adapter = roomChatAdapter
         viewLifecycleOwner.lifecycleScope.launch {
             roomsChatViewModel.roomsChat.collectLatest {
