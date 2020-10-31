@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/nav_graph"
-            app:startDestination="@id/FirstFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/FirstFragment">
 
     <fragment
-            android:id="@+id/FirstFragment"
-            android:name="id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.main.FirstFragment"
-            android:label="main fragment"
-            tools:layout="@layout/first_fragment">
+        android:id="@+id/FirstFragment"
+        android:name="id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.main.FirstFragment"
+        android:label="main fragment"
+        tools:layout="@layout/first_fragment">
 
         <action
-                android:id="@+id/action_FirstFragment_to_AddFragment"
-                app:destination="@id/navigation_add_friend"/>
+            android:id="@+id/action_FirstFragment_to_AddFragment"
+            app:destination="@id/navigation_add_friend"/>
+
+        <action
+            android:id="@+id/action_FirstFragment_to_Chat"
+            app:destination="@id/navigation_chat"/>
     </fragment>
 
     <fragment
@@ -21,7 +25,12 @@
         android:name="id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.room.RoomFragment"
         android:label="room fragment"
         tools:layout="@layout/room_fragment">
+
+        <action
+            android:id="@+id/action_RoomFragment_to_Chat"
+            app:destination="@id/navigation_chat"/>
     </fragment>
+
     <navigation android:id="@+id/navigation_add_friend"
         app:startDestination="@id/AddFragment">
         <fragment
@@ -33,6 +42,32 @@
             <action
                 android:id="@+id/action_AddFragment_to_FirstFragment"
                 app:destination="@id/FirstFragment"
+                app:popUpTo="@id/FirstFragment"
+                app:popUpToInclusive="true" />
+        </fragment>
+    </navigation>
+
+    <navigation android:id="@+id/navigation_chat"
+        app:startDestination="@id/ChatFragment">
+        <fragment
+            android:id="@+id/ChatFragment"
+            android:name="id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.chat.ChatFragment"
+            android:label="chat fragment"
+            tools:layout="@layout/chat_fragment">
+            <argument
+                android:name="roomUid"
+                android:defaultValue="0"
+                app:argType="integer" />
+
+            <action
+                android:id="@+id/action_ChatFragment_to_FirstFragment"
+                app:destination="@id/FirstFragment"
+                app:popUpTo="@id/FirstFragment"
+                app:popUpToInclusive="true" />
+
+            <action
+                android:id="@+id/action_ChatFragment_to_RoomFragment"
+                app:destination="@id/RoomFragment"
                 app:popUpTo="@id/FirstFragment"
                 app:popUpToInclusive="true" />
         </fragment>

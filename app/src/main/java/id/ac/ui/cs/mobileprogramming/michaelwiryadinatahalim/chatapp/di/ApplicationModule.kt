@@ -9,6 +9,7 @@ import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ChatAppDatabase
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.FriendDao
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.MessageDao
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.RoomChatDao
 import javax.inject.Singleton
 
@@ -36,5 +37,11 @@ object ApplicationModule {
     @Singleton
     fun provideRoomChatDao(db: ChatAppDatabase): RoomChatDao {
         return db.roomChatDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideMessageDao(db: ChatAppDatabase): MessageDao {
+        return db.messageDao()
     }
 }
