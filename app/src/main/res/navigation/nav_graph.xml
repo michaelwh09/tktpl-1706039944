@@ -13,11 +13,11 @@
 
         <action
             android:id="@+id/action_FirstFragment_to_AddFragment"
-            app:destination="@id/navigation_add_friend"/>
+            app:destination="@id/AddFragment"/>
 
         <action
             android:id="@+id/action_FirstFragment_to_Chat"
-            app:destination="@id/navigation_chat">
+            app:destination="@id/ChatFragment">
             <argument
                 android:name="roomUid"
                 android:defaultValue="0L"
@@ -33,7 +33,7 @@
 
         <action
             android:id="@+id/action_RoomFragment_to_Chat"
-            app:destination="@id/navigation_chat">
+            app:destination="@id/ChatFragment">
             <argument
                 android:name="roomUid"
                 android:defaultValue="0L"
@@ -41,8 +41,7 @@
         </action>
     </fragment>
 
-    <navigation android:id="@+id/navigation_add_friend"
-        app:startDestination="@id/AddFragment">
+
         <fragment
             android:id="@+id/AddFragment"
             android:name="id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.add.AddFragment"
@@ -55,10 +54,7 @@
                 app:popUpTo="@id/FirstFragment"
                 app:popUpToInclusive="true" />
         </fragment>
-    </navigation>
 
-    <navigation android:id="@+id/navigation_chat"
-        app:startDestination="@id/ChatFragment">
         <fragment
             android:id="@+id/ChatFragment"
             android:name="id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.chat.ChatFragment"
@@ -70,5 +66,4 @@
                 app:argType="long" />
 
         </fragment>
-    </navigation>
 </navigation>

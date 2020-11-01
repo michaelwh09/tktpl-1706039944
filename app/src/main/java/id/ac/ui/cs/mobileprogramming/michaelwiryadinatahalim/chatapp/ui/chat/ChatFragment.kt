@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navGraphViewModels
 import androidx.paging.LoadState
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,13 +31,13 @@ class ChatFragment : Fragment() {
     @Inject
     lateinit var roomInfoViewModelAssistedFactory: RoomInfoViewModel.AssistedRoomInfoViewModelFactory
 
-    private val chatMessageViewModel: ChatMessageViewModel by viewModels {
+    private val chatMessageViewModel: ChatMessageViewModel by navGraphViewModels(R.id.ChatFragment) {
         ChatMessageViewModel.provideFactory(
             chatMessageViewModelAssistedFactory, args.roomUid
         )
     }
 
-    private val roomInfoViewModel: RoomInfoViewModel by viewModels {
+    private val roomInfoViewModel: RoomInfoViewModel by navGraphViewModels(R.id.ChatFragment) {
         RoomInfoViewModel.provideFactory(
             roomInfoViewModelAssistedFactory, args.roomUid
         )

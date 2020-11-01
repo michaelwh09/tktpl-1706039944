@@ -7,4 +7,5 @@ interface IMessageRepository {
 
     fun getAllMessagesByRoomUid(roomUid: Long) : PagingSource<Int, Message>
 
+    fun sendMessage(roomUid: Long, message: String)
 }

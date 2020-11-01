@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import androidx.paging.LoadState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -25,7 +26,9 @@ class FirstFragment : Fragment(), RecyclerViewOnClickListener<UserAndRoomChat> {
 
     private val friendsViewModel: FriendsViewModel by activityViewModels()
 
-    private val friendRoomViewModel: FriendRoomViewModel by activityViewModels()
+    private val friendRoomViewModel: FriendRoomViewModel by navGraphViewModels(R.id.FirstFragment) {
+        defaultViewModelProviderFactory
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

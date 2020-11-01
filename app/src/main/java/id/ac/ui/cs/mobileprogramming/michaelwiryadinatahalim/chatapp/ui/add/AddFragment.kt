@@ -27,7 +27,7 @@ class AddFragment : Fragment() {
         private const val TAG = "AddFragment"
     }
 
-    private val addFriendViewModel: AddFriendViewModel by navGraphViewModels(R.id.navigation_add_friend) {
+    private val addFriendViewModel: AddFriendViewModel by navGraphViewModels(R.id.AddFragment) {
         defaultViewModelProviderFactory
     }
 
