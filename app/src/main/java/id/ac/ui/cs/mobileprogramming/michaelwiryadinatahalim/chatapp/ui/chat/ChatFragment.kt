@@ -68,22 +68,34 @@ class ChatFragment : Fragment() {
             }
         }
 
+        chat_fragment.viewTreeObserver.addOnGlobalLayoutListener {
+            if (chat_fragment != null) {
+                val heightDiff = chat_fragment.rootView.height - chat_fragment.height
+                if (heightDiff > 100 && messageAdapter.itemCount > 0) {
+                    rv_chat_message.smoothScrollToPosition(0)
+                }
+            }
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             messageAdapter.loadStateFlow.collectLatest {
                 message_progress_bar.isVisible = it.refresh is LoadState.Loading
                 if (it.refresh is LoadState.Error) {
-                    Snackbar.make(chat_fragment, (it.refresh as LoadState.Error).error.message?: "Unknown error",
-                        Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(
+                        chat_fragment, (it.refresh as LoadState.Error).error.message ?: "Unknown error",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
 
         roomInfoViewModel.roomInfo.observe(viewLifecycleOwner, {
             if (it != null) {
-                toolbar_chat.title = it.user?.displayName?:it.roomChat?.userUid
+                toolbar_chat.title = it.user?.displayName ?: it.roomChat?.userUid
                 button_send_message.setOnClickListener { _: View? ->
                     add_message_field.text?.let { text ->
-                        sendMessageViewModel.sendMessage(text.trim().toString(),
+                        sendMessageViewModel.sendMessage(
+                            text.trim().toString(),
                             (it.user?.uid ?: it.roomChat?.userUid)!!
                         )
                         add_message_field.text = null
