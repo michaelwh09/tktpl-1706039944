@@ -23,6 +23,7 @@ class LoginViewModel @ViewModelInject constructor(
     private val userFirestoreRepository: UserFirestoreRepository
 ) : ViewModel() {
 
+
     private val _authResult = MutableLiveData<State<AuthResult>>()
 
     val authResult : LiveData<State<AuthResult>> = _authResult
@@ -39,7 +40,7 @@ class LoginViewModel @ViewModelInject constructor(
             loginRepository.signInWithCredentialGoogle(credential).collect {
                 when (it) {
                     is State.Success -> {
-                        getFcmToken(it)
+                        fcmRepository.enableFcm()
                     }
                     else -> _authResult.postValue(it)
                 }
@@ -47,37 +48,5 @@ class LoginViewModel @ViewModelInject constructor(
         }
     }
 
-    private suspend fun getFcmToken(authResult: State.Success<AuthResult>) {
-        val user = authResult.data.user
-        if (user != null) {
-            fcmRepository.getFcmToken().collect {
-                when (it) {
-                    is State.Success -> {
-                        saveTokenToFirestore(it, user, authResult)
-                    }
-                    is State.Failed -> _authResult.postValue(State.failed(it.throwable))
-                    else -> {}
-                }
-            }
-        } else {
-            _authResult.postValue(State.failed(RuntimeException("User null")))
-        }
-    }
-
-    private suspend fun saveTokenToFirestore(
-        it1: State.Success<String>,
-        user: FirebaseUser,
-        authResult: State.Success<AuthResult>
-    ) {
-        userFirestoreRepository.addTokenToUserFirestore(it1.data, user).collect {
-            when (it) {
-                is State.Success -> {
-                    _authResult.postValue(authResult)
-                }
-                is State.Failed -> _authResult.postValue(State.failed(it.throwable))
-                else -> {}
-            }
-        }
-    }
 }
 

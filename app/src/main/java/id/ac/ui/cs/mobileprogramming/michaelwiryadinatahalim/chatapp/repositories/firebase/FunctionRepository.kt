@@ -40,15 +40,20 @@ class FunctionRepository {
         emit(State.failed(it))
     }.flowOn(Dispatchers.IO)
 
-    suspend fun sendMessageToUser(receiverUid: String, message: String): Boolean {
+    fun sendMessageToUser(receiverUid: String, message: String): Flow<State<Boolean>> = flow {
+        emit(State.loading())
         val data = hashMapOf(
             "receiverUid" to receiverUid,
             "message" to message
         )
-        return functions
+        val result = functions
             .getHttpsCallable("sendMessageToUser")
             .call(data)
-            .continueWith { task -> task.result?.data as Boolean }
+            .continueWith {task -> task.result?.data as Boolean}
             .await()
-    }
+
+        emit(State.success(result))
+    }.catch{
+        emit(State.failed(it))
+    }.flowOn(Dispatchers.IO)
 }

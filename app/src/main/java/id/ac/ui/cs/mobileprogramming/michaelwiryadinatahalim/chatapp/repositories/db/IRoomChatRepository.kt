@@ -10,5 +10,5 @@ interface IRoomChatRepository {
 
     fun createSingleEmptyRoom(userUid: String) : Long
 
-    fun getDetailRoomChatByUid(uid: Long): Flow<UserAndRoomChat>
+    fun getDetailRoomChatByUid(uid: Long): Flow<UserAndRoomChat?>
 }

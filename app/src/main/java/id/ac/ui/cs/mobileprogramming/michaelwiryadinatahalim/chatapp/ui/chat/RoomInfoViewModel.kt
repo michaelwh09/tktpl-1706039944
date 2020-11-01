@@ -29,5 +29,5 @@ class RoomInfoViewModel @AssistedInject constructor(
         }
     }
 
-    val roomInfo: LiveData<UserAndRoomChat> = roomRepository.getDetailRoomChatByUid(roomUid).asLiveData()
+    val roomInfo: LiveData<UserAndRoomChat?> = roomRepository.getDetailRoomChatByUid(roomUid).asLiveData()
 }

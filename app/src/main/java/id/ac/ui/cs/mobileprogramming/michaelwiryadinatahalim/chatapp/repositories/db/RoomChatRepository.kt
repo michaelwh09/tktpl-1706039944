@@ -20,8 +20,7 @@ class RoomChatRepository @Inject constructor(
             userUid))
     }
 
-    override fun getDetailRoomChatByUid(uid: Long): Flow<UserAndRoomChat> {
+    override fun getDetailRoomChatByUid(uid: Long): Flow<UserAndRoomChat?> {
         return roomChatDao.getRoomByUid(uid)
     }
-
 }

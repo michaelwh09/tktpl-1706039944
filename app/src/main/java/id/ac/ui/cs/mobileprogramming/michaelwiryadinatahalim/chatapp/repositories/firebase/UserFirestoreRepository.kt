@@ -14,13 +14,10 @@ import kotlinx.coroutines.tasks.await
 class UserFirestoreRepository {
     private val db = Firebase.firestore
 
-    fun addTokenToUserFirestore(token: String, user: FirebaseUser) : Flow<State<Void>> = flow {
-        emit(State.loading())
+    fun addTokenToUserFirestore(token: String, user: FirebaseUser)  {
         val data = hashMapOf(
             "fcm_token" to token
         )
-        emit(State.success(db.collection("users").document(user.uid).set(data).await()))
-    }.catch {
-        emit(State.failed(it))
-    }.flowOn(Dispatchers.IO)
+        db.collection("users").document(user.uid).set(data)
+    }
 }

@@ -19,8 +19,12 @@ interface RoomChatDao {
 
     @Transaction
     @Query("SELECT U.* FROM user_table AS U INNER JOIN room_chat_table AS R ON U.uid = R.user_uid WHERE R.uid == :uid")
-    fun getRoomByUid(uid: Long): Flow<UserAndRoomChat>
+    fun getRoomByUid(uid: Long): Flow<UserAndRoomChat?>
 
     @Update(entity = RoomChat::class)
     fun updateLastMessageWithoutUnread(roomUpdate: RoomChatUpdateLastMessage)
+
+    @Transaction
+    @Query("SELECT U.* FROM user_table AS U INNER JOIN room_chat_table AS R ON U.uid = R.user_uid WHERE U.uid == :userUid")
+    fun getRoomByUserUid(userUid: String): Flow<UserAndRoomChat?>
 }
