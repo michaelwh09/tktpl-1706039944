@@ -15,7 +15,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.serialization.json.Json
 
 @ExperimentalCoroutinesApi
-class UserRepository {
+class FunctionRepository {
     private var functions: FirebaseFunctions = Firebase.functions("asia-southeast2")
 
     fun getUserByEmail(email : String): Flow<State<User>> = flow {
@@ -39,4 +39,16 @@ class UserRepository {
     }.catch {
         emit(State.failed(it))
     }.flowOn(Dispatchers.IO)
+
+    suspend fun sendMessageToUser(receiverUid: String, message: String): Boolean {
+        val data = hashMapOf(
+            "receiverUid" to receiverUid,
+            "message" to message
+        )
+        return functions
+            .getHttpsCallable("sendMessageToUser")
+            .call(data)
+            .continueWith { task -> task.result?.data as Boolean }
+            .await()
+    }
 }

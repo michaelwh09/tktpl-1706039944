@@ -80,13 +80,12 @@ class ChatFragment : Fragment() {
 
         roomInfoViewModel.roomInfo.observe(viewLifecycleOwner, {
             toolbar_chat.title = it.user.displayName
-        })
-
-        button_send_message.setOnClickListener { _: View? ->
-            add_message_field.text?.let {
-                sendMessageViewModel.sendMessage(it.trim().toString())
-                add_message_field.text = null
+            button_send_message.setOnClickListener { _: View? ->
+                add_message_field.text?.let { text ->
+                    sendMessageViewModel.sendMessage(text.trim().toString(), it.user.uid)
+                    add_message_field.text = null
+                }
             }
-        }
+        })
     }
 }

@@ -30,9 +30,9 @@ class SendMessageViewModel @AssistedInject constructor(
         }
     }
 
-    fun sendMessage(message: String) {
+    fun sendMessage(message: String, receiverUid: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            messageRepository.sendMessage(roomUid, message)
+            messageRepository.sendMessage(roomUid, message, receiverUid)
         }
     }
 }

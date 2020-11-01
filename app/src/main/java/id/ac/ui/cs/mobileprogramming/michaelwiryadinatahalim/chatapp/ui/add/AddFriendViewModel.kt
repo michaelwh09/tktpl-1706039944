@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IFriendRepository
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.UserRepository
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.FunctionRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 @ExperimentalCoroutinesApi
 class AddFriendViewModel
 @ViewModelInject constructor(
-    private val repository: UserRepository,
+    private val repository: FunctionRepository,
     private val friendRepository: IFriendRepository
 ): ViewModel() {
 
