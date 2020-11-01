@@ -1,6 +1,7 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.activity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
@@ -23,8 +24,8 @@ class MainActivity : AppCompatActivity() {
         if (navFragment != null) {
             val navController = navFragment.findNavController()
             navController.addOnDestinationChangedListener { _, destination, _ ->
-                bottomNavigation.isVisible = (destination.id == R.id.first_fragment
-                        || destination.id == R.id.room_fragment)
+                bottomNavigation.isVisible = (destination.id == R.id.FirstFragment
+                        || destination.id == R.id.RoomFragment)
             }
             NavigationUI.setupWithNavController(bottomNavigation, navController)
         }
