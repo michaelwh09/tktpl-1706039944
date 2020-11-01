@@ -1,11 +1,9 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao
 
 import androidx.paging.PagingSource
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.RoomChat
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.RoomChatUpdateLastMessage
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChat
 import kotlinx.coroutines.flow.Flow
 
@@ -22,4 +20,7 @@ interface RoomChatDao {
     @Transaction
     @Query("SELECT U.* FROM user_table AS U INNER JOIN room_chat_table AS R ON U.uid = R.user_uid WHERE R.uid == :uid")
     fun getRoomByUid(uid: Long): Flow<UserAndRoomChat>
+
+    @Update(entity = RoomChat::class)
+    fun updateLastMessageWithoutUnread(roomUpdate: RoomChatUpdateLastMessage)
 }

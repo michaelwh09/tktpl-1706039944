@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
@@ -22,7 +22,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ChatFragment : Fragment() {
 
-
     private val args: ChatFragmentArgs by navArgs()
 
     @Inject
@@ -30,6 +29,15 @@ class ChatFragment : Fragment() {
 
     @Inject
     lateinit var roomInfoViewModelAssistedFactory: RoomInfoViewModel.AssistedRoomInfoViewModelFactory
+
+    @Inject
+    lateinit var sendMessageViewModelAssistedFactory: SendMessageViewModel.AssistedSendMessageViewModelFactory
+
+    private val sendMessageViewModel: SendMessageViewModel by navGraphViewModels(R.id.ChatFragment) {
+        SendMessageViewModel.provideFactory(
+            sendMessageViewModelAssistedFactory, args.roomUid
+        )
+    }
 
     private val chatMessageViewModel: ChatMessageViewModel by navGraphViewModels(R.id.ChatFragment) {
         ChatMessageViewModel.provideFactory(
@@ -50,6 +58,9 @@ class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val messageAdapter = MessageAdapter()
+        val linearLayout = LinearLayoutManager(context)
+        linearLayout.reverseLayout = true
+        rv_chat_message.layoutManager = linearLayout
         rv_chat_message.adapter = messageAdapter
         viewLifecycleOwner.lifecycleScope.launch {
             chatMessageViewModel.messages.collectLatest {
@@ -71,5 +82,11 @@ class ChatFragment : Fragment() {
             toolbar_chat.title = it.user.displayName
         })
 
+        button_send_message.setOnClickListener { _: View? ->
+            add_message_field.text?.let {
+                sendMessageViewModel.sendMessage(it.trim().toString())
+                add_message_field.text = null
+            }
+        }
     }
 }
