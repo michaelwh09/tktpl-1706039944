@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.RoomChatDao
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.RoomChat
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChat
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class RoomChatRepository @Inject constructor(
@@ -17,6 +18,10 @@ class RoomChatRepository @Inject constructor(
     override fun createSingleEmptyRoom(userUid: String): Long {
         return roomChatDao.insertSingleRoom(RoomChat(0, null, null, null,
             userUid))
+    }
+
+    override fun getDetailRoomChatByUid(uid: Long): Flow<UserAndRoomChat> {
+        return roomChatDao.getRoomByUid(uid)
     }
 
 }

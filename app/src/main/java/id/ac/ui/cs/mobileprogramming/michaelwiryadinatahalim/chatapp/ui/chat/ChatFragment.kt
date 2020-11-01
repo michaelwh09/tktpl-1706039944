@@ -27,9 +27,18 @@ class ChatFragment : Fragment() {
     @Inject
     lateinit var chatMessageViewModelAssistedFactory: ChatMessageViewModel.AssistedChatMessageViewModelFactory
 
+    @Inject
+    lateinit var roomInfoViewModelAssistedFactory: RoomInfoViewModel.AssistedRoomInfoViewModelFactory
+
     private val chatMessageViewModel: ChatMessageViewModel by viewModels {
         ChatMessageViewModel.provideFactory(
             chatMessageViewModelAssistedFactory, args.roomUid
+        )
+    }
+
+    private val roomInfoViewModel: RoomInfoViewModel by viewModels {
+        RoomInfoViewModel.provideFactory(
+            roomInfoViewModelAssistedFactory, args.roomUid
         )
     }
 
@@ -56,5 +65,10 @@ class ChatFragment : Fragment() {
                 }
             }
         }
+
+        roomInfoViewModel.roomInfo.observe(viewLifecycleOwner, {
+            toolbar_chat.title = it.user.displayName
+        })
+
     }
 }

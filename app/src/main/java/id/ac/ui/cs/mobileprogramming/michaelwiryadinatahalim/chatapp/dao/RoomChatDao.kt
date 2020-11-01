@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.RoomChat
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChat
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RoomChatDao {
@@ -17,4 +18,8 @@ interface RoomChatDao {
 
     @Insert
     fun insertSingleRoom(room: RoomChat): Long
+
+    @Transaction
+    @Query("SELECT U.* FROM user_table AS U INNER JOIN room_chat_table AS R ON U.uid = R.user_uid WHERE R.uid == :uid")
+    fun getRoomByUid(uid: Long): Flow<UserAndRoomChat>
 }
