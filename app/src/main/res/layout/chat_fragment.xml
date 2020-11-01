@@ -31,6 +31,7 @@
         app:layout_constraintTop_toBottomOf="@id/appbar_chat"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/layout_chatbox"
         android:layout_height="0dp" />
 
     <ProgressBar

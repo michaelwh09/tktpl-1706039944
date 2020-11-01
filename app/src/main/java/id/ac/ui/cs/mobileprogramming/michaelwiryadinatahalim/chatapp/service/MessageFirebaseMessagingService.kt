@@ -20,18 +20,14 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.activity.Ma
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IMessageRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IRoomChatRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.UserFirestoreRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MessageFirebaseMessagingService : FirebaseMessagingService() {
 
     private val job = SupervisorJob()
-    private val scope = CoroutineScope(Dispatchers.IO + job)
+    private val scope = CoroutineScope(context = Dispatchers.IO + job)
 
     @Inject
     lateinit var userFirestoreRepository: UserFirestoreRepository
@@ -63,24 +59,24 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        super.onMessageReceived(remoteMessage)
         if (remoteMessage.data.isNotEmpty()) {
             val message = remoteMessage.data["message"]
             val sender = remoteMessage.data["sender"]
             if (message != null && sender!= null) {
+                Log.d("PESAN MASUK", message)
                 scope.launch {
-                    roomRepository.getUserRoom(sender).collect {
-                        if (it?.roomChat == null) {
-                            val roomId = roomRepository.createRoom(message, sender)
-                            messageRepository.receiveMessage(roomId, message, sender)
-                            sendNotification(message, roomId, sender)
-                        } else {
-                            val roomId = it.roomChat.uid
-                            roomRepository.updateRoom(roomId, message)
-                            messageRepository.receiveMessage(roomId, message, sender)
-                            sendNotification(message, roomId, it.user?.displayName?:sender)
-                        }
+                    val room = roomRepository.getUserRoom(sender)
+                    if (room?.roomChat == null) {
+                        val roomId = roomRepository.createRoom(message, sender)
+                        messageRepository.receiveMessage(roomId, message, sender)
+//                        sendNotification(message, roomId, sender)
+                    } else {
+                        val roomId = room.roomChat.uid
+                        roomRepository.updateRoom(roomId, message)
+                        messageRepository.receiveMessage(roomId, message, sender)
+//                        sendNotification(message, roomId, room.user?.displayName ?: sender)
                     }
-
                 }
             }
         }

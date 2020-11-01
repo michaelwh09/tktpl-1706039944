@@ -12,7 +12,7 @@ interface IRoomChatRepository {
 
     fun getDetailRoomChatByUid(uid: Long): Flow<UserAndRoomChat?>
 
-    fun getUserRoom(senderUid: String): Flow<UserAndRoomChat?>
+    suspend fun getUserRoom(senderUid: String): UserAndRoomChat?
 
     suspend fun createRoom(latestMessage: String, senderUid: String) : Long
 

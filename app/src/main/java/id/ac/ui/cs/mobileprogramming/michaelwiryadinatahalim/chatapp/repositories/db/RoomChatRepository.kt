@@ -26,7 +26,7 @@ class RoomChatRepository @Inject constructor(
         return roomChatDao.getRoomByUid(uid)
     }
 
-    override fun getUserRoom(senderUid: String): Flow<UserAndRoomChat?> {
+    override suspend fun getUserRoom(senderUid: String): UserAndRoomChat? {
         return roomChatDao.getRoomByUserUid(senderUid)
     }
 
