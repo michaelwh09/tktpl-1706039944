@@ -1,5 +1,6 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.activity.login
 
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,7 +21,6 @@ import kotlinx.coroutines.launch
 class LoginViewModel @ViewModelInject constructor(
     private val loginRepository: LoginRepository,
     private val fcmRepository: FcmRepository,
-    private val userFirestoreRepository: UserFirestoreRepository
 ) : ViewModel() {
 
 
@@ -42,8 +42,9 @@ class LoginViewModel @ViewModelInject constructor(
                     is State.Success -> {
                         fcmRepository.enableFcm()
                     }
-                    else -> _authResult.postValue(it)
+                    else -> {}
                 }
+                _authResult.postValue(it)
             }
         }
     }

@@ -13,5 +13,5 @@ interface MessageDao {
     fun getAllMessagesByRoomUid(roomUid: Long) : PagingSource<Int, Message>
 
     @Insert
-    fun insertMessage(vararg message: Message)
+    suspend fun insertMessage(vararg message: Message)
 }

@@ -11,6 +11,9 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ChatAppData
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.FriendDao
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.MessageDao
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.RoomChatDao
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.FunctionRepository
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.UserFirestoreRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Singleton
 
 @Module
@@ -43,5 +46,16 @@ object ApplicationModule {
     @Singleton
     fun provideMessageDao(db: ChatAppDatabase): MessageDao {
         return db.messageDao()
+    }
+
+    @ExperimentalCoroutinesApi
+    @Provides
+    fun provideFirebaseFunctionRepository() : FunctionRepository {
+        return FunctionRepository()
+    }
+
+    @Provides
+    fun provideUserFirestoreRepository() : UserFirestoreRepository {
+        return UserFirestoreRepository()
     }
 }

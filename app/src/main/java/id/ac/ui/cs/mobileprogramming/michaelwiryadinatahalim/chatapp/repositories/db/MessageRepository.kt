@@ -6,10 +6,12 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.RoomCha
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.Message
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.RoomChat
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.RoomChatUpdateLastMessage
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChat
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.FunctionRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.State
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
 import java.time.Instant
@@ -28,38 +30,30 @@ class MessageRepository
         return messageDao.getAllMessagesByRoomUid(roomUid)
     }
 
-    override fun sendMessage(roomUid: Long, message: String, receiverUid: String) {
+    override suspend fun sendMessage(roomUid: Long, message: String, receiverUid: String) {
+        val timestamp = Instant.now().epochSecond
+        val messageModel = Message(
+            UUID.randomUUID().toString(),
+            timestamp,
+            message,
+            false,
+            roomUid
+        )
+        val roomUpdate = RoomChatUpdateLastMessage(roomUid, message, timestamp)
+        messageDao.insertMessage(messageModel)
+        roomDao.updateLastMessageWithoutUnread(roomUpdate)
         functionRepository.sendMessageToUser(receiverUid, message)
-            .map {
-                if (it is State.Success && it.data) {
-                    val timestamp = Instant.now().epochSecond
-                    val messageModel = Message(
-                        UUID.randomUUID().toString(),
-                        timestamp,
-                        message,
-                        false,
-                        roomUid
-                    )
-                    val roomUpdate = RoomChatUpdateLastMessage(roomUid, message, timestamp)
-                    messageDao.insertMessage(messageModel)
-                    roomDao.updateLastMessageWithoutUnread(roomUpdate)
-                }
-            }
     }
 
-    override fun receivedMessage(message: String, senderUid: String): Flow<Long> {
+    override suspend fun receiveMessage(roomUid: Long, message: String, senderUid: String) {
         val timestamp = Instant.now().epochSecond
-        return roomDao.getRoomByUserUid(senderUid).transform {
-            val roomId: Long
-            if (it?.roomChat == null) {
-                roomId = roomDao.insertSingleRoom(
-                    RoomChat(0, message, timestamp, null,
-                        senderUid))
-            } else {
-                roomId = it.roomChat.uid
-                roomDao.updateLastMessageWithoutUnread(RoomChatUpdateLastMessage(roomId, message, timestamp))
-            }
-            emit(roomId)
-        }
+        val messageModel = Message(
+            UUID.randomUUID().toString(),
+            timestamp,
+            message,
+            true,
+            roomUid
+        )
+        messageDao.insertMessage(messageModel)
     }
 }

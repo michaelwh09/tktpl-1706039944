@@ -46,7 +46,7 @@ class RoomChatAdapter: PagingDataAdapter<UserAndRoomChat, RoomChatAdapter.RoomCh
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<UserAndRoomChat>() {
             override fun areItemsTheSame(oldItem: UserAndRoomChat, newItem: UserAndRoomChat): Boolean =
-                oldItem.user.uid == newItem.user.uid && oldItem.roomChat?.uid == newItem.roomChat?.uid
+                oldItem.user?.uid == newItem.user?.uid && oldItem.roomChat?.uid == newItem.roomChat?.uid
 
             override fun areContentsTheSame(oldItem: UserAndRoomChat, newItem: UserAndRoomChat): Boolean =
                 oldItem == newItem

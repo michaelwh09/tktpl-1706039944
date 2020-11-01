@@ -10,6 +10,7 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositorie
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class FriendRoomViewModel @ViewModelInject constructor(

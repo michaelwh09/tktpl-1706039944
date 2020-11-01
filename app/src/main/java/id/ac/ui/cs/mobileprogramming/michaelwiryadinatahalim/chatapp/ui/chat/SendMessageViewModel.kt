@@ -1,5 +1,6 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.chat
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -32,6 +33,7 @@ class SendMessageViewModel @AssistedInject constructor(
 
     fun sendMessage(message: String, receiverUid: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            Log.d("Send message", "$message, $receiverUid")
             messageRepository.sendMessage(roomUid, message, receiverUid)
         }
     }

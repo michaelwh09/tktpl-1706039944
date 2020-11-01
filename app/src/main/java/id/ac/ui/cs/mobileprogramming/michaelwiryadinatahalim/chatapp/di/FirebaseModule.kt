@@ -10,15 +10,10 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositorie
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.FunctionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@ExperimentalCoroutinesApi
+
 @Module
 @InstallIn(ActivityRetainedComponent::class)
 object FirebaseModule {
-
-    @Provides
-    fun provideFirebaseFunctionRepository() : FunctionRepository {
-        return FunctionRepository()
-    }
 
     @Provides
     fun provideFirebaseLoginRepository() : LoginRepository {
@@ -28,10 +23,5 @@ object FirebaseModule {
     @Provides
     fun provideFcmRepository() : FcmRepository {
         return FcmRepository()
-    }
-
-    @Provides
-    fun provideUserFirestoreRepository() : UserFirestoreRepository {
-        return UserFirestoreRepository()
     }
 }

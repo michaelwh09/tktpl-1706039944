@@ -69,17 +69,18 @@ class FirstFragment : Fragment(), RecyclerViewOnClickListener<UserAndRoomChat> {
     override fun onItemClicked(view: View, data: UserAndRoomChat) {
         context?.let {
             MaterialAlertDialogBuilder(it)
-                .setTitle(data.user.displayName)
-                .setMessage(data.user.email)
+                .setTitle(data.user?.displayName)
+                .setMessage(data.user?.email)
                 .setPositiveButton("Chat") { dialog, _ ->
                     dialog.dismiss()
                     if (data.roomChat == null) {
-                        friendRoomViewModel.createNewRoomForUser(data.user.uid)
-                        friendRoomViewModel.roomUid.observe(viewLifecycleOwner, { roomUid ->
-                            if (roomUid != null) {
-                                navigateToChatRoom(roomUid)
-                            }
-                        })
+                        data.user?.uid?.let { userUid -> friendRoomViewModel.createNewRoomForUser(userUid)
+                            friendRoomViewModel.roomUid.observe(viewLifecycleOwner, { roomUid ->
+                                if (roomUid != null) {
+                                    navigateToChatRoom(roomUid)
+                                }
+                            })
+                        }
                         return@setPositiveButton
                     }
                     navigateToChatRoom(data.roomChat.uid)
