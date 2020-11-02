@@ -16,7 +16,7 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.receiver.Re
 fun createNotification(
     context: Context, roomUid: Long,
     style: NotificationCompat.Style, senderName: String, messageBody: String, timestamp: Long, senderUid: String,
-    repliedTexts: ArrayList<String>? = null, repliedTimestamp: ArrayList<String>? = null
+    repliedTexts: ArrayList<String>? = ArrayList(), repliedTimestamp: ArrayList<String>? = ArrayList()
 ): Notification {
 
     val replyLabel = "reply pesan"
