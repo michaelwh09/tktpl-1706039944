@@ -4,8 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.FriendRepository
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IFriendRepository
 
 @Module
 @InstallIn(ActivityRetainedComponent::class)
