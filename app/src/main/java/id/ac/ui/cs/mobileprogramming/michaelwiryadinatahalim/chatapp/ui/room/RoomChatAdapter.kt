@@ -23,7 +23,7 @@ class RoomChatAdapter: PagingDataAdapter<UserAndRoomChatNullable, RoomChatAdapte
 
         fun bindTo(user: UserAndRoomChatNullable?, itemClickListener: RecyclerViewOnClickListener<UserAndRoomChatNullable>?) {
             userAndRoomChat = user
-            nameView.text = userAndRoomChat?.user?.displayName
+            nameView.text = userAndRoomChat?.user?.displayName?: userAndRoomChat?.roomChat?.userUid
             lastMessage.text = userAndRoomChat?.roomChat?.lastMessage?: ""
             userAndRoomChat?.roomChat?.lastMessageTimestamp?.let {
                 lastMessageTimestamp.text = java.time.format.DateTimeFormatter.ISO_INSTANT

@@ -19,7 +19,7 @@ interface RoomChatDao {
         R.last_message_timestamp AS room_last_message_timestamp,
         R.unread_message AS room_unread_message,
         R.user_uid AS room_user_uid
-        FROM user_table AS U INNER JOIN room_chat_table AS R ON U.uid = R.user_uid ORDER BY R.last_message_timestamp DESC""")
+        FROM ROOM_CHAT_TABLE AS R LEFT JOIN user_table AS U ORDER BY R.last_message_timestamp DESC""")
     fun getAllRoomsChatAndFriend() : PagingSource<Int, UserAndRoomChatNullable>
 
     @Insert
@@ -31,8 +31,8 @@ interface RoomChatDao {
         R.last_message_timestamp AS room_last_message_timestamp,
         R.unread_message AS room_unread_message,
         R.user_uid AS room_user_uid
-        FROM user_table AS U INNER JOIN room_chat_table AS R ON U.uid = R.user_uid WHERE R.uid == :uid""")
-    fun getRoomByUid(uid: Long): Flow<UserAndRoomChatNullable>
+        FROM ROOM_CHAT_TABLE AS R LEFT JOIN user_table AS U WHERE R.uid == :uid""")
+    fun getRoomByUid(uid: Long): Flow<UserAndRoomChatNullable?>
 
     @Update(entity = RoomChat::class)
     fun updateLastMessageWithoutUnread(roomUpdate: RoomChatUpdateLastMessage)
@@ -42,7 +42,6 @@ interface RoomChatDao {
         R.last_message AS room_last_message,
         R.last_message_timestamp AS room_last_message_timestamp,
         R.unread_message AS room_unread_message,
-        R.user_uid AS room_user_uid
-        FROM user_table AS U INNER JOIN room_chat_table AS R ON U.uid = R.user_uid WHERE U.uid == :userUid""")
-    suspend fun getRoomByUserUid(userUid: String): UserAndRoomChatNullable
+        R.user_uid AS room_user_uid FROM ROOM_CHAT_TABLE AS R LEFT JOIN user_table AS U ON U.uid = R.user_uid WHERE R.user_uid == :userUid""")
+    suspend fun getRoomByUserUid(userUid: String): UserAndRoomChatNullable?
 }

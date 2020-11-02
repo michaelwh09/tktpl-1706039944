@@ -11,9 +11,9 @@ interface IRoomChatRepository {
 
     suspend fun createSingleEmptyRoom(userUid: String) : Long
 
-    fun getDetailRoomChatByUid(uid: Long): Flow<UserAndRoomChatNullable>
+    fun getDetailRoomChatByUid(uid: Long): Flow<UserAndRoomChatNullable?>
 
-    suspend fun getUserRoom(senderUid: String): UserAndRoomChatNullable
+    suspend fun getUserRoom(senderUid: String): UserAndRoomChatNullable?
 
     suspend fun createRoom(latestMessage: String, senderUid: String) : Long
 

@@ -66,16 +66,20 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
             if (message != null && sender!= null) {
                 Log.d("PESAN MASUK", message)
                 scope.launch {
-                    val room = roomRepository.getUserRoom(sender)
-                    if (room.roomChat == null) {
-                        val roomId = roomRepository.createRoom(message, sender)
-                        messageRepository.receiveMessage(roomId, message, sender)
+                    try {
+                        val room = roomRepository.getUserRoom(sender)
+                        if (room?.roomChat == null) {
+                            val roomId = roomRepository.createRoom(message, sender)
+                            messageRepository.receiveMessage(roomId, message, sender)
 //                        sendNotification(message, roomId, sender)
-                    } else {
-                        val roomId = room.roomChat.uid
-                        roomRepository.updateRoom(roomId, message)
-                        messageRepository.receiveMessage(roomId, message, sender)
+                        } else {
+                            val roomId = room.roomChat.uid
+                            roomRepository.updateRoom(roomId, message)
+                            messageRepository.receiveMessage(roomId, message, sender)
 //                        sendNotification(message, roomId, room.user?.displayName ?: sender)
+                        }
+                    } catch (e: Exception) {
+                        Log.e("SERVICE FCM", e.message?:"")
                     }
                 }
             }

@@ -23,11 +23,11 @@ class RoomChatRepository @Inject constructor(
             userUid))
     }
 
-    override fun getDetailRoomChatByUid(uid: Long): Flow<UserAndRoomChatNullable> {
+    override fun getDetailRoomChatByUid(uid: Long): Flow<UserAndRoomChatNullable?> {
         return roomChatDao.getRoomByUid(uid)
     }
 
-    override suspend fun getUserRoom(senderUid: String): UserAndRoomChatNullable {
+    override suspend fun getUserRoom(senderUid: String): UserAndRoomChatNullable? {
         return roomChatDao.getRoomByUserUid(senderUid)
     }
 

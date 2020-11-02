@@ -30,5 +30,5 @@ class RoomInfoViewModel @AssistedInject constructor(
         }
     }
 
-    val roomInfo: LiveData<UserAndRoomChatNullable> = roomRepository.getDetailRoomChatByUid(roomUid).asLiveData()
+    val roomInfo: LiveData<UserAndRoomChatNullable?> = roomRepository.getDetailRoomChatByUid(roomUid).asLiveData()
 }
