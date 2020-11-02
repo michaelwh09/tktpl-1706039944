@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChat
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChatNullable
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.RecyclerViewOnClickListener
 
-class RoomChatAdapter: PagingDataAdapter<UserAndRoomChat, RoomChatAdapter.RoomChatViewHolder>(diffCallback) {
+class RoomChatAdapter: PagingDataAdapter<UserAndRoomChatNullable, RoomChatAdapter.RoomChatViewHolder>(diffCallback) {
 
     class RoomChatViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
         LayoutInflater.from(parent.context).inflate(R.layout.room_item, parent, false)
@@ -18,9 +19,9 @@ class RoomChatAdapter: PagingDataAdapter<UserAndRoomChat, RoomChatAdapter.RoomCh
         private val nameView = itemView.findViewById<TextView>(R.id.room_friend_name)
         private val lastMessage = itemView.findViewById<TextView>(R.id.last_message)
         private val lastMessageTimestamp = itemView.findViewById<TextView>(R.id.last_message_timestamp)
-        private var userAndRoomChat: UserAndRoomChat? = null
+        private var userAndRoomChat: UserAndRoomChatNullable? = null
 
-        fun bindTo(user: UserAndRoomChat?, itemClickListener: RecyclerViewOnClickListener<UserAndRoomChat>?) {
+        fun bindTo(user: UserAndRoomChatNullable?, itemClickListener: RecyclerViewOnClickListener<UserAndRoomChatNullable>?) {
             userAndRoomChat = user
             nameView.text = userAndRoomChat?.user?.displayName
             lastMessage.text = userAndRoomChat?.roomChat?.lastMessage?: ""
@@ -34,7 +35,7 @@ class RoomChatAdapter: PagingDataAdapter<UserAndRoomChat, RoomChatAdapter.RoomCh
         }
     }
 
-    var itemClickListener: RecyclerViewOnClickListener<UserAndRoomChat>? = null
+    var itemClickListener: RecyclerViewOnClickListener<UserAndRoomChatNullable>? = null
 
     override fun onBindViewHolder(holder: RoomChatViewHolder, position: Int) {
         holder.bindTo(getItem(position), itemClickListener)
@@ -44,11 +45,11 @@ class RoomChatAdapter: PagingDataAdapter<UserAndRoomChat, RoomChatAdapter.RoomCh
         RoomChatViewHolder(parent)
 
     companion object {
-        private val diffCallback = object : DiffUtil.ItemCallback<UserAndRoomChat>() {
-            override fun areItemsTheSame(oldItem: UserAndRoomChat, newItem: UserAndRoomChat): Boolean =
+        private val diffCallback = object : DiffUtil.ItemCallback<UserAndRoomChatNullable>() {
+            override fun areItemsTheSame(oldItem: UserAndRoomChatNullable, newItem: UserAndRoomChatNullable): Boolean =
                 oldItem.user?.uid == newItem.user?.uid && oldItem.roomChat?.uid == newItem.roomChat?.uid
 
-            override fun areContentsTheSame(oldItem: UserAndRoomChat, newItem: UserAndRoomChat): Boolean =
+            override fun areContentsTheSame(oldItem: UserAndRoomChatNullable, newItem: UserAndRoomChatNullable): Boolean =
                 oldItem == newItem
         }
     }

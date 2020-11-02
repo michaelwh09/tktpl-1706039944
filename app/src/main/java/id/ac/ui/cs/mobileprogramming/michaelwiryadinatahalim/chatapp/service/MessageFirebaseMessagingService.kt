@@ -67,7 +67,7 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
                 Log.d("PESAN MASUK", message)
                 scope.launch {
                     val room = roomRepository.getUserRoom(sender)
-                    if (room?.roomChat == null) {
+                    if (room.roomChat == null) {
                         val roomId = roomRepository.createRoom(message, sender)
                         messageRepository.receiveMessage(roomId, message, sender)
 //                        sendNotification(message, roomId, sender)

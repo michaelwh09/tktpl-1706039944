@@ -2,17 +2,18 @@ package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositori
 
 import androidx.paging.PagingSource
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChat
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChatNullable
 import kotlinx.coroutines.flow.Flow
 
 interface IRoomChatRepository {
 
-    fun getAllRoomsChat() : PagingSource<Int, UserAndRoomChat>
+    fun getAllRoomsChat() : PagingSource<Int, UserAndRoomChatNullable>
 
     suspend fun createSingleEmptyRoom(userUid: String) : Long
 
-    fun getDetailRoomChatByUid(uid: Long): Flow<UserAndRoomChat?>
+    fun getDetailRoomChatByUid(uid: Long): Flow<UserAndRoomChatNullable>
 
-    suspend fun getUserRoom(senderUid: String): UserAndRoomChat?
+    suspend fun getUserRoom(senderUid: String): UserAndRoomChatNullable
 
     suspend fun createRoom(latestMessage: String, senderUid: String) : Long
 

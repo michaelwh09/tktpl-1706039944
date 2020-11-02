@@ -5,6 +5,7 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.RoomCha
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.RoomChat
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.RoomChatUpdateLastMessage
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChat
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChatNullable
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 import javax.inject.Inject
@@ -13,7 +14,7 @@ class RoomChatRepository @Inject constructor(
     private val roomChatDao: RoomChatDao
 ): IRoomChatRepository {
 
-    override fun getAllRoomsChat(): PagingSource<Int, UserAndRoomChat> {
+    override fun getAllRoomsChat(): PagingSource<Int, UserAndRoomChatNullable> {
         return roomChatDao.getAllRoomsChatAndFriend()
     }
 
@@ -22,11 +23,11 @@ class RoomChatRepository @Inject constructor(
             userUid))
     }
 
-    override fun getDetailRoomChatByUid(uid: Long): Flow<UserAndRoomChat?> {
+    override fun getDetailRoomChatByUid(uid: Long): Flow<UserAndRoomChatNullable> {
         return roomChatDao.getRoomByUid(uid)
     }
 
-    override suspend fun getUserRoom(senderUid: String): UserAndRoomChat? {
+    override suspend fun getUserRoom(senderUid: String): UserAndRoomChatNullable {
         return roomChatDao.getRoomByUserUid(senderUid)
     }
 

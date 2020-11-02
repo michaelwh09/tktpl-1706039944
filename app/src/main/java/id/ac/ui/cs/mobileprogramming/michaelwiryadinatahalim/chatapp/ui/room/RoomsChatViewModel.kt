@@ -8,6 +8,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChat
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChatNullable
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IRoomChatRepository
 import kotlinx.coroutines.flow.Flow
 
@@ -15,7 +16,7 @@ class RoomsChatViewModel @ViewModelInject constructor(
     private val roomChatRepository: IRoomChatRepository
 ): ViewModel() {
 
-    val roomsChat: Flow<PagingData<UserAndRoomChat>> = Pager(
+    val roomsChat: Flow<PagingData<UserAndRoomChatNullable>> = Pager(
         PagingConfig(
             pageSize = 30,
             enablePlaceholders = true,

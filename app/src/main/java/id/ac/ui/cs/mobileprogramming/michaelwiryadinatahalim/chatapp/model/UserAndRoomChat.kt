@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 
 data class UserAndRoomChat(
-    @Embedded val user: User?,
+    @Embedded val user: User,
 
     @Relation(
         parentColumn = "uid",
