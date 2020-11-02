@@ -74,15 +74,18 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
                         if (room?.roomChat == null) {
                             val roomId = roomRepository.createRoom(message, sender)
                             messageRepository.receiveMessage(roomId, message, sender)
-//                        sendNotification(message, roomId, sender)
+                            sendNotification(message, roomId, sender)
+                            return@launch
                         } else {
                             val roomId = room.roomChat.uid
                             roomRepository.updateRoom(roomId, message)
                             messageRepository.receiveMessage(roomId, message, sender)
-//                        sendNotification(message, roomId, room.user?.displayName ?: sender)
+                            sendNotification(message, roomId, room.user?.displayName ?: sender)
+                            return@launch
                         }
                     } catch (e: Exception) {
                         Log.e("SERVICE FCM", e.message?:"")
+                        return@launch
                     }
                 }
             }
@@ -103,6 +106,7 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
             .setContentText(messageBody)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -110,8 +114,8 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(channelId,
-                "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT)
+                "Chatapp channel",
+                NotificationManager.IMPORTANCE_HIGH)
             notificationManager.createNotificationChannel(channel)
         }
 
