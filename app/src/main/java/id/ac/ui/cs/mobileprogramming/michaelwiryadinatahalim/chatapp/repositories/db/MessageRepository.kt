@@ -25,6 +25,10 @@ class MessageRepository
 
     override suspend fun sendMessage(roomUid: Long, message: String, receiverUid: String) {
         val timestamp = Instant.now().epochSecond
+        sendMessage(roomUid, message, receiverUid, timestamp)
+    }
+
+    override suspend fun sendMessage(roomUid: Long, message: String, receiverUid: String, timestamp: Long) {
         val messageModel = Message(
             UUID.randomUUID().toString(),
             timestamp,
@@ -38,8 +42,7 @@ class MessageRepository
         functionRepository.sendMessageToUser(receiverUid, message)
     }
 
-    override suspend fun receiveMessage(roomUid: Long, message: String, senderUid: String) {
-        val timestamp = Instant.now().epochSecond
+    override suspend fun receiveMessage(roomUid: Long, message: String, senderUid: String, timestamp: Long) {
         val messageModel = Message(
             UUID.randomUUID().toString(),
             timestamp,

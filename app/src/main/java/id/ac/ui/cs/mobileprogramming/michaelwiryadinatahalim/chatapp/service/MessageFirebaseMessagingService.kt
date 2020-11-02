@@ -5,12 +5,11 @@ import android.app.KeyguardManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.media.RingtoneManager
 import android.os.Build
-import android.os.Bundle
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.navigation.NavDeepLinkBuilder
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.Person
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -18,19 +17,21 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.activity.MainActivity
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IMessageRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IRoomChatRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.UserFirestoreRepository
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.createNotification
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import java.time.Instant
 import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class MessageFirebaseMessagingService : FirebaseMessagingService() {
+
 
     private val job = SupervisorJob()
     private val scope = CoroutineScope(context = Dispatchers.IO + job)
@@ -73,17 +74,19 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
                 Log.d("PESAN MASUK", message)
                 scope.launch {
                     try {
+                        val timestamp = Instant.now().epochSecond
                         val room = roomRepository.getUserRoom(sender)
                         if (room?.roomChat == null) {
                             val roomId = roomRepository.createRoom(message, sender)
-                            messageRepository.receiveMessage(roomId, message, sender)
-                            sendNotification(message, roomId, sender, sender)
+                            messageRepository.receiveMessage(roomId, message, sender, timestamp)
+                            sendNotification(message, roomId, sender, sender, timestamp)
                             return@launch
                         } else {
                             val roomId = room.roomChat.uid
                             roomRepository.updateRoom(roomId, message)
-                            messageRepository.receiveMessage(roomId, message, sender)
-                            sendNotification(message, roomId, room.user?.displayName ?: sender, sender)
+                            messageRepository.receiveMessage(roomId, message, sender, timestamp)
+                            sendNotification(message, roomId, room.user?.displayName ?:
+                            sender, sender, timestamp)
                             return@launch
                         }
                     } catch (e: Exception) {
@@ -105,30 +108,22 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
         return (applicationContext.getSystemService(KEYGUARD_SERVICE) as KeyguardManager).isKeyguardLocked
     }
 
-    private fun sendNotification(messageBody: String, roomUid: Long, senderName: String?, senderUid: String) {
+    private fun sendNotification(messageBody: String, roomUid: Long, senderName: String?, senderUid: String, timestamp: Long) {
         if (! shouldShowNotification()) return
-        val bundle = Bundle()
-        bundle.putLong("roomUid", roomUid)
-        val pendingIntent = NavDeepLinkBuilder(applicationContext)
-            .setGraph(R.navigation.nav_graph)
-            .setDestination(R.id.ChatFragment)
-            .setArguments(bundle)
-            .setComponentName(MainActivity::class.java)
-            .createPendingIntent()
-
+        val style = NotificationCompat.MessagingStyle(
+            Person.Builder().setName(senderName)
+                .build()
+        )
+            .addMessage(
+                messageBody,
+                timestamp,
+                Person.Builder().setName(senderName).build()
+            )
+        val notification = createNotification(
+            applicationContext, roomUid, style,
+            senderName?:senderUid, messageBody, timestamp, senderUid
+        )
         val channelId = getString(R.string.default_notification_channel_id)
-        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_baseline_notifications_active_24)
-            .setContentTitle(senderName ?: senderUid)
-            .setContentText(messageBody)
-            .setAutoCancel(true)
-            .setSound(defaultSoundUri)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-            .setGroup(senderUid)
-            .setContentIntent(pendingIntent)
-
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Since android Oreo notification channel is needed.
@@ -140,8 +135,9 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
             )
             notificationManager.createNotificationChannel(channel)
         }
-
-        notificationManager.notify(roomUid.toInt(), notificationBuilder.build())
+        NotificationManagerCompat.from(this).apply {
+            notificationManager.notify(roomUid.toInt(), notification)
+        }
     }
 
     override fun onDestroy() {

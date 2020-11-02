@@ -9,6 +9,8 @@ interface IMessageRepository {
 
     suspend fun sendMessage(roomUid: Long, message: String, receiverUid: String)
 
-    suspend fun receiveMessage(roomUid: Long, message: String, senderUid: String)
+    suspend fun receiveMessage(roomUid: Long, message: String, senderUid: String, timestamp: Long)
+
+    suspend fun sendMessage(roomUid: Long, message: String, receiverUid: String, timestamp: Long)
 
 }

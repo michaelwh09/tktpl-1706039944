@@ -8,6 +8,7 @@ import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChatNullable
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IRoomChatRepository
+import kotlinx.coroutines.Dispatchers
 
 class RoomInfoViewModel @AssistedInject constructor(
     roomRepository: IRoomChatRepository,
@@ -29,5 +30,6 @@ class RoomInfoViewModel @AssistedInject constructor(
         }
     }
 
-    val roomInfo: LiveData<UserAndRoomChatNullable?> = roomRepository.getDetailRoomChatByUid(roomUid).asLiveData()
+    val roomInfo: LiveData<UserAndRoomChatNullable?> = roomRepository.getDetailRoomChatByUid(roomUid)
+        .asLiveData(Dispatchers.IO)
 }
