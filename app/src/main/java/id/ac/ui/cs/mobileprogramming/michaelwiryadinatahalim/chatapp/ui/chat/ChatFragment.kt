@@ -65,6 +65,9 @@ class ChatFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             chatMessageViewModel.messages.collectLatest {
                 messageAdapter.submitData(it)
+                if (messageAdapter.itemCount > 0) {
+                    rv_chat_message.smoothScrollToPosition(0)
+                }
             }
         }
 
