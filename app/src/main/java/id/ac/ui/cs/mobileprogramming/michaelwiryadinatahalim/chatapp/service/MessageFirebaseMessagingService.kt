@@ -1,14 +1,16 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.service
 
+import android.app.ActivityManager
+import android.app.KeyguardManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.navigation.NavDeepLinkBuilder
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -25,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MessageFirebaseMessagingService : FirebaseMessagingService() {
@@ -74,17 +77,17 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
                         if (room?.roomChat == null) {
                             val roomId = roomRepository.createRoom(message, sender)
                             messageRepository.receiveMessage(roomId, message, sender)
-                            sendNotification(message, roomId, sender)
+                            sendNotification(message, roomId, sender, sender)
                             return@launch
                         } else {
                             val roomId = room.roomChat.uid
                             roomRepository.updateRoom(roomId, message)
                             messageRepository.receiveMessage(roomId, message, sender)
-                            sendNotification(message, roomId, room.user?.displayName ?: sender)
+                            sendNotification(message, roomId, room.user?.displayName ?: sender, sender)
                             return@launch
                         }
                     } catch (e: Exception) {
-                        Log.e("SERVICE FCM", e.message?:"")
+                        Log.e("SERVICE FCM", e.message ?: "")
                         return@launch
                     }
                 }
@@ -92,30 +95,49 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
-    private fun sendNotification(messageBody: String, roomUid: Long, sender: String) {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, roomUid.toInt(), intent,
-            PendingIntent.FLAG_ONE_SHOT)
+    private fun shouldShowNotification(): Boolean {
+        val process = ActivityManager.RunningAppProcessInfo()
+        ActivityManager.getMyMemoryState(process)
+        if (process.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+            return true
+        }
+        // app is in foreground, but if screen is locked show notification anyway
+        return (applicationContext.getSystemService(KEYGUARD_SERVICE) as KeyguardManager).isKeyguardLocked
+    }
+
+    private fun sendNotification(messageBody: String, roomUid: Long, senderName: String?, senderUid: String) {
+        if (! shouldShowNotification()) return
+        val bundle = Bundle()
+        bundle.putLong("roomUid", roomUid)
+        val pendingIntent = NavDeepLinkBuilder(applicationContext)
+            .setGraph(R.navigation.nav_graph)
+            .setDestination(R.id.ChatFragment)
+            .setArguments(bundle)
+            .setComponentName(MainActivity::class.java)
+            .createPendingIntent()
 
         val channelId = getString(R.string.default_notification_channel_id)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_baseline_notifications_active_24)
-            .setContentTitle(sender)
+            .setContentTitle(senderName ?: senderUid)
             .setContentText(messageBody)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .setGroup(senderUid)
             .setContentIntent(pendingIntent)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId,
+            val channel = NotificationChannel(
+                channelId,
                 "Chatapp channel",
-                NotificationManager.IMPORTANCE_HIGH)
+                NotificationManager.IMPORTANCE_HIGH
+            )
             notificationManager.createNotificationChannel(channel)
         }
 
