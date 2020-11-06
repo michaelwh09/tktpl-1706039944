@@ -17,12 +17,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.UserAndRoomChat
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.RecyclerViewOnClickListener
-import kotlinx.android.synthetic.main.first_fragment.*
+import kotlinx.android.synthetic.main.friend_fragment.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class FirstFragment : Fragment(), RecyclerViewOnClickListener<UserAndRoomChat> {
+class FriendFragment : Fragment(), RecyclerViewOnClickListener<UserAndRoomChat> {
 
     private val friendsViewModel: FriendsViewModel by activityViewModels()
 
@@ -34,7 +34,7 @@ class FirstFragment : Fragment(), RecyclerViewOnClickListener<UserAndRoomChat> {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.first_fragment, container, false)
+        return inflater.inflate(R.layout.friend_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

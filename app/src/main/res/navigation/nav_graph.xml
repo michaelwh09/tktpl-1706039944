@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.main.FirstFragment"
+        android:name="id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.main.FriendFragment"
         android:label="main fragment"
-        tools:layout="@layout/first_fragment">
+        tools:layout="@layout/friend_fragment">
 
         <action
             android:id="@+id/action_FirstFragment_to_AddFragment"
