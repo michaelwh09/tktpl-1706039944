@@ -3,7 +3,7 @@ package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositori
 import com.google.firebase.functions.FirebaseFunctions
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.User
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.State
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

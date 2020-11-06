@@ -2,8 +2,8 @@ package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositori
 
 import androidx.paging.PagingSource
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.FriendDao
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChat
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.User
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.UserAndRoomChat
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

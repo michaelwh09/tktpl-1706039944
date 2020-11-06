@@ -5,8 +5,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChat
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.User
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.UserAndRoomChat
 import kotlinx.coroutines.flow.Flow
 
 @Dao

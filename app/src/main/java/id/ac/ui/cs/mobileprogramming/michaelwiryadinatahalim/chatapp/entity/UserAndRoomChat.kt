@@ -1,4 +1,4 @@
-package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model
+package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity
 
 import androidx.room.Embedded
 import androidx.room.Relation

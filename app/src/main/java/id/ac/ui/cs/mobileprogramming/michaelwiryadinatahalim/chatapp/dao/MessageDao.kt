@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.Message
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.Message
 
 @Dao
 interface MessageDao {

@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.User
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IFriendRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.FunctionRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.State

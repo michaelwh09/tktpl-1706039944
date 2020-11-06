@@ -3,8 +3,8 @@ package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositori
 import androidx.paging.PagingSource
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.MessageDao
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.RoomChatDao
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.Message
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.RoomChatUpdateLastMessage
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.Message
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.RoomChatUpdateLastMessage
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.FunctionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.time.Instant

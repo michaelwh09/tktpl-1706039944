@@ -10,7 +10,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.Message
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.Message
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IMessageRepository
 import kotlinx.coroutines.flow.Flow
 

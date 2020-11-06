@@ -1,7 +1,7 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db
 
 import androidx.paging.PagingSource
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.UserAndRoomChatNullable
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.UserAndRoomChatNullable
 import kotlinx.coroutines.flow.Flow
 
 interface IRoomChatRepository {

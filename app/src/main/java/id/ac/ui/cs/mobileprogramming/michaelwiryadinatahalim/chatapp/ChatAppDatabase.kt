@@ -5,9 +5,9 @@ import androidx.room.RoomDatabase
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.FriendDao
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.MessageDao
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.RoomChatDao
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.Message
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.RoomChat
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.Message
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.RoomChat
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.User
 
 @Database(entities = [User::class, RoomChat::class, Message::class], version = 1, exportSchema = false)
 abstract class ChatAppDatabase : RoomDatabase() {

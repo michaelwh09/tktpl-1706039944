@@ -7,7 +7,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.Message
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.Message
 import java.time.Instant
 
 class MessageAdapter: PagingDataAdapter<Message, RecyclerView.ViewHolder>(diffCallback) {

@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.User
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.User
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.State
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.hideKeyboard
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.isValidEmail
