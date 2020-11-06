@@ -62,7 +62,7 @@ class FriendFragment : Fragment(), RecyclerViewOnClickListener<UserAndRoomChat> 
     }
 
     private fun navigateToChatRoom(roomUid: Long) {
-        val action = FirstFragmentDirections.actionFirstFragmentToChat(roomUid)
+        val action = FriendFragmentDirections.actionFirstFragmentToChat(roomUid)
         findNavController().navigate(action)
     }
 
