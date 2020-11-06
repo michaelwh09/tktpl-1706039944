@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-
+    name: Lint
     runs-on: self-hosted
 
     steps:
@@ -19,22 +19,5 @@ jobs:
           java-version: 11
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
-      - name: Adding credential
-        shell: bash
-        run: |
-          echo "$KEYSTORE" > app/keystore-decoded.txt
-          base64 -d app/keystore-decoded.txt > app/keystore-tktpl-proj.jks
-          echo "$KEYSTORE_PROPERTIES" > keystore.properties
-          echo "$GOOGLE_SERVICE" > app/google-services.json
-          chmod +x gradlew
-        env:
-          KEYSTORE: ${{secrets.KEYSTORE}}
-          KEYSTORE_PROPERTIES: ${{secrets.KEYSTORE_PROPERTIES}}
-          GOOGLE_SERVICE: ${{secrets.GOOGLE_SERVICE}}
-      - name: Build with Gradle
-        run: ./gradlew build
-      - name: Archive apk generated
-        uses: actions/upload-artifact@v2
-        with:
-          name: apk-generated
-          path: app/build/outputs/apk/release
+      - name: Lint code
+        run: ./gradlew lint
