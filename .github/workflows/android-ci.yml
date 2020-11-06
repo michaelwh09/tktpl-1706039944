@@ -20,4 +20,6 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
       - name: Lint code
-        run: ./gradlew lint
+        run: |
+          chmod +x gradlew
+          ./gradlew lint
