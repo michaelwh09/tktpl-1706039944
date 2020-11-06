@@ -11,12 +11,13 @@ import androidx.core.app.RemoteInput
 import androidx.navigation.NavDeepLinkBuilder
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.activity.MainActivity
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.NotificationModel
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.receiver.ReplyReceiver
 
 fun createNotification(
-    context: Context, roomUid: Long,
-    style: NotificationCompat.Style, senderName: String, messageBody: String, timestamp: Long, senderUid: String,
-    repliedTexts: ArrayList<String>? = ArrayList(), repliedTimestamp: ArrayList<String>? = ArrayList()
+    context: Context,
+    style: NotificationCompat.Style,
+    data: NotificationModel
 ): Notification {
 
     val replyLabel = "reply pesan"
@@ -26,20 +27,12 @@ fun createNotification(
     }
     val replyIntent = Intent(context, ReplyReceiver::class.java).also {
         it.action = "id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.REPLY_NOTIFICATION"
-        it.putExtra("roomUid", roomUid)
-        it.putExtra("senderName", senderName)
-        it.putExtra("message", messageBody)
-        it.putExtra("timestamp", timestamp)
-        it.putExtra("senderUid", senderUid)
-        if (repliedTexts != null && repliedTimestamp != null) {
-            it.putStringArrayListExtra("replied", repliedTexts)
-            it.putStringArrayListExtra("repliedTimestamp", repliedTimestamp)
-        }
+        it.putExtra("id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.notification.data", data)
     }
     val replyPendingIntent: PendingIntent =
         PendingIntent.getBroadcast(
             context,
-            roomUid.toInt(),
+            data.roomUid.toInt(),
             replyIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
@@ -56,7 +49,7 @@ fun createNotification(
     val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
 
     val bundle = Bundle()
-    bundle.putLong("roomUid", roomUid)
+    bundle.putLong("roomUid", data.roomUid)
     val pendingIntent = NavDeepLinkBuilder(context)
         .setGraph(R.navigation.nav_graph)
         .setDestination(R.id.ChatFragment)
@@ -73,7 +66,7 @@ fun createNotification(
         .setSound(defaultSoundUri)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
         .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-        .setGroup(roomUid.toString())
+        .setGroup(data.roomUid.toString())
         .addAction(action)
         .setContentIntent(pendingIntent)
         .build()

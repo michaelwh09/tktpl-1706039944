@@ -13,6 +13,8 @@ import androidx.core.app.RemoteInput
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.NotificationModel
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.ReplyMessage
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IMessageRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.createNotification
 import kotlinx.coroutines.Dispatchers
@@ -30,17 +32,14 @@ class ReplyReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent != null && context != null) {
             val replyText = getMessageText(intent).toString()
+            val data = intent.getParcelableExtra<NotificationModel>(
+                "id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.notification.data")!!
             Log.d(TAG, replyText)
             val timestamp = Instant.now().epochSecond
-            val roomUid = intent.getLongExtra("roomUid", -1)
-            val senderUid = intent.getStringExtra("senderUid")?:""
-            val repliedTexts = intent.getStringArrayListExtra("replied")
-            val repliedTimestamp = intent.getStringArrayListExtra("repliedTimestamp")
-            repliedTexts?.add(replyText)
-            repliedTimestamp?.add(timestamp.toString())
+            data.repliedMessage.add(ReplyMessage(replyText, timestamp))
             GlobalScope.launch(Dispatchers.IO) {
                 try {
-                    messageRepository.sendMessage(roomUid, replyText, senderUid, timestamp)
+                    messageRepository.sendMessage(data.roomUid, replyText, data.senderUid, timestamp)
                     return@launch
                 } catch (e: Exception) {
                     Log.e(TAG, e.message?:"")
@@ -48,19 +47,11 @@ class ReplyReceiver : BroadcastReceiver() {
             }
             val notification = createNotificationReply(
                 context,
-                intent.getLongExtra("roomUid", -1),
-                intent.getStringExtra("message")?:"",
-                intent.getLongExtra("timestamp", -1),
-                intent.getStringExtra("senderName")?:"",
-                timestamp,
-                replyText,
-                senderUid,
-                repliedTexts,
-                repliedTimestamp
+                data
             )
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             NotificationManagerCompat.from(context).apply {
-                notificationManager.notify(roomUid.toInt(), notification)
+                notificationManager.notify(data.roomUid.toInt(), notification)
             }
         }
     }
@@ -76,39 +67,26 @@ class ReplyReceiver : BroadcastReceiver() {
     }
 
     private fun createNotificationReply(
-        context: Context, roomUid: Long,
-        messageBody: String, timestamp: Long, senderName: String, timestampReply: Long,
-        messageBodyReply: String, senderUid: String, repliedText: ArrayList<String>?,
-        repliedTimestamp: ArrayList<String>?
+        context: Context,
+        data: NotificationModel
     ): Notification {
         val currentUserName = Firebase.auth.currentUser?.displayName
         val replier = Person.Builder().setName(currentUserName).build()
+        val senderName = data.senderName
         val style = NotificationCompat.MessagingStyle(
             Person.Builder().setName(senderName)
                 .build()
         )
             .addMessage(
-                messageBody,
-                timestamp,
+                data.message,
+                data.timestamp,
                 Person.Builder().setName(senderName).build()
             )
-            .addMessage(
-                messageBodyReply,
-                timestampReply,
-                replier
-            )
-        if (repliedText != null && repliedTimestamp != null) {
-            for (x in 0 until repliedText.size) {
-                style.addMessage(repliedText[x], repliedTimestamp[x].toLong(), replier)
-            }
+        for (reply in data.repliedMessage) {
+            style.addMessage(reply.message, reply.timestamp, replier)
         }
        return createNotification(
-           context, roomUid, style,
-           senderName,
-           messageBody, timestamp,
-           senderUid,
-           repliedText,
-           repliedTimestamp
+           context, style, data
        )
     }
 }

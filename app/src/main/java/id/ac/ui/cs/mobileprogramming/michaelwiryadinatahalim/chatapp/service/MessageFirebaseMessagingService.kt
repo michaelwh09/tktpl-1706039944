@@ -17,6 +17,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.model.NotificationModel
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IMessageRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IRoomChatRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.UserFirestoreRepository
@@ -120,8 +121,9 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
                 Person.Builder().setName(senderName).build()
             )
         val notification = createNotification(
-            applicationContext, roomUid, style,
-            senderName?:senderUid, messageBody, timestamp, senderUid
+            applicationContext, style,
+            NotificationModel(roomUid, senderName?:senderUid,
+                messageBody, timestamp, senderUid, ArrayList())
         )
         val channelId = getString(R.string.default_notification_channel_id)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
