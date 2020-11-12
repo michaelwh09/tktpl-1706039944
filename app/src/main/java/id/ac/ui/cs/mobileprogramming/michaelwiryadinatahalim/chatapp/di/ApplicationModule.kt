@@ -59,9 +59,4 @@ object ApplicationModule {
     fun provideUserFirestoreRepository() : UserFirestoreRepository {
         return UserFirestoreRepository()
     }
-
-    @Provides
-    fun provideStorageRepository() : StorageRepository {
-        return StorageRepository()
-    }
 }

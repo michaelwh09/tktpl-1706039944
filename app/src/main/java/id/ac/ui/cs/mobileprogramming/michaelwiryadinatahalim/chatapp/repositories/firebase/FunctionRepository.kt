@@ -44,7 +44,7 @@ class FunctionRepository {
         val data = hashMapOf(
             "receiverUid" to receiverUid,
             "message" to message,
-            "isImage" to false
+            "isImage" to "false"
         )
         return functions
             .getHttpsCallable("sendMessageToUser")
@@ -57,7 +57,7 @@ class FunctionRepository {
         val data = hashMapOf(
             "receiverUid" to receiverUid,
             "message" to path,
-            "isImage" to true
+            "isImage" to "true"
         )
         return functions
             .getHttpsCallable("sendMessageToUser")

@@ -19,7 +19,7 @@ class RoomChatRepository @Inject constructor(
 
     override suspend fun createSingleEmptyRoom(userUid: String): Long {
         return roomChatDao.insertSingleRoom(RoomChat(0, null, null, null,
-            userUid))
+            userUid, null))
     }
 
     override fun getDetailRoomChatByUid(uid: Long): Flow<UserAndRoomChatNullable?> {
@@ -30,11 +30,11 @@ class RoomChatRepository @Inject constructor(
         return roomChatDao.getRoomByUserUid(senderUid)
     }
 
-    override suspend fun createRoom(latestMessage: String, senderUid: String): Long {
+    override suspend fun createRoom(latestMessage: String, senderUid: String, senderEmail: String?): Long {
         val timestamp = Instant.now().epochSecond
         return roomChatDao.insertSingleRoom(
             RoomChat(0, latestMessage, timestamp, 1,
-                senderUid))
+                senderUid, senderEmail))
     }
 
     override fun updateRoom(roomUid: Long, latestMessage: String) {

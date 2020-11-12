@@ -11,4 +11,5 @@ data class RoomChat(
     @ColumnInfo(name = "last_message_timestamp") val lastMessageTimestamp: Long?,
     @ColumnInfo(name = "unread_message") val unreadMessage: Long?,
     @ColumnInfo(name = "user_uid") val userUid: String?,
+    @ColumnInfo(name = "user_email_temp") val userEmailTemp: String?
 )

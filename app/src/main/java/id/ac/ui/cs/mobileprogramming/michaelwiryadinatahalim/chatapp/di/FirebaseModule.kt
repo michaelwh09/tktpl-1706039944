@@ -22,4 +22,9 @@ object FirebaseModule {
     fun provideFcmRepository() : FcmRepository {
         return FcmRepository()
     }
+
+    @Provides
+    fun provideStorageRepository() : StorageRepository {
+        return StorageRepository()
+    }
 }

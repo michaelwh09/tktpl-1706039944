@@ -111,7 +111,7 @@ class ChatFragment : Fragment() {
 
         roomInfoViewModel.roomInfo.observe(viewLifecycleOwner, {
             if (it != null) {
-                toolbar_chat.title = it.user?.displayName ?: it.roomChat?.userUid
+                toolbar_chat.title = it.user?.displayName ?: it.roomChat?.userEmailTemp?: it.roomChat?.userUid
                 roomChat = it
             }
         })

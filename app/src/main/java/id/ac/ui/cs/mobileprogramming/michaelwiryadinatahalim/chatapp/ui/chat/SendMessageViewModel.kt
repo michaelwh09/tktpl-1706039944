@@ -6,12 +6,14 @@ import androidx.lifecycle.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IMessageRepository
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IPictureMessageRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.InputStream
 
 class SendMessageViewModel @AssistedInject constructor(
     private val messageRepository: IMessageRepository,
+    private val pictureMessageRepository: IPictureMessageRepository,
     @Assisted private val roomUid: Long
 ): ViewModel() {
 
@@ -49,7 +51,7 @@ class SendMessageViewModel @AssistedInject constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
             try {
-                messageRepository.sendPicture(roomUid, photoUri, receiverUid, InputStream)
+                pictureMessageRepository.sendPicture(roomUid, photoUri, receiverUid, InputStream)
             } catch (_: Exception) {
                 _error.postValue(true)
                 _error.postValue(false)

@@ -20,7 +20,6 @@ class MessageRepository
     private val messageDao: MessageDao,
     private val roomDao: RoomChatDao,
     private val functionRepository: FunctionRepository,
-    private val storageRepository: StorageRepository
 ): IMessageRepository {
 
     override fun getAllMessagesByRoomUid(roomUid: Long): PagingSource<Int, Message> {
@@ -64,28 +63,5 @@ class MessageRepository
         roomDao.updateLastMessageWithoutUnread(roomUpdate)
     }
 
-    override suspend fun sendPicture(roomUid: Long, photoUri: Uri, receiverUid: String,
-                                     inputStream: InputStream
-    ) {
-        val timestamp = Instant.now().epochSecond
-        sendPicture(roomUid, photoUri, receiverUid, timestamp, inputStream)
-    }
 
-    private suspend fun sendPicture(roomUid: Long, photoUri: Uri, receiverUid: String, timestamp: Long,
-    inputStream: InputStream) {
-        val messageModel = Message(
-            UUID.randomUUID().toString(),
-            timestamp,
-            null,
-            false,
-            roomUid,
-            true,
-            photoUri.toString(),
-        )
-        messageDao.insertMessage(messageModel)
-        val roomUpdate = RoomChatUpdateLastMessage(roomUid, "Photo sent", timestamp)
-        roomDao.updateLastMessageWithoutUnread(roomUpdate)
-        val url = storageRepository.uploadImage(receiverUid, inputStream)
-        functionRepository.sendPictureToUser(receiverUid, url)
-    }
 }
