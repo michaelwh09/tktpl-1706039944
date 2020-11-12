@@ -4,7 +4,6 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.tasks.await
 import java.io.InputStream
-import java.lang.RuntimeException
 import java.util.*
 
 class StorageRepository {

@@ -1,15 +1,12 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db
 
-import android.net.Uri
 import androidx.paging.PagingSource
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.MessageDao
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.RoomChatDao
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.Message
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.RoomChatUpdateLastMessage
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.FunctionRepository
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.StorageRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import java.io.InputStream
 import java.time.Instant
 import java.util.*
 import javax.inject.Inject
