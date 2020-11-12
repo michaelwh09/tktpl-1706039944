@@ -129,6 +129,15 @@ class ChatFragment : Fragment() {
         button_camera.setOnClickListener {
             dispatchTakePictureIntent()
         }
+
+        sendMessageViewModel.error.observe(viewLifecycleOwner, {
+            if (it) {
+                Snackbar.make(
+                    chat_fragment, "Failed to upload photo",
+                    Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        })
     }
     
     private fun dispatchTakePictureIntent() {

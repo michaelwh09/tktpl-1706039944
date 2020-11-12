@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.Message
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.GlideApp
 import java.time.Instant
 
 class PictureSendViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
@@ -22,7 +22,7 @@ class PictureSendViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
         message = messageModel
         message?.let {
             val context = pictureView.context
-            Glide.with(context)
+            GlideApp.with(context)
                 .load(Uri.parse(it.uriPhoto))
                 .centerCrop()
                 .into(pictureView)

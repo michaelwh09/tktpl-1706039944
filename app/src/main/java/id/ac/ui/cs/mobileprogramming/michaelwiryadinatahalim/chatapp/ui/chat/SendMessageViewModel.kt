@@ -2,15 +2,12 @@ package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.chat
 
 import android.net.Uri
 import android.util.Log
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.squareup.inject.assisted.Assisted
 import com.squareup.inject.assisted.AssistedInject
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IMessageRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.FileInputStream
 import java.io.InputStream
 
 class SendMessageViewModel @AssistedInject constructor(
@@ -21,6 +18,13 @@ class SendMessageViewModel @AssistedInject constructor(
     @AssistedInject.Factory
     interface AssistedSendMessageViewModelFactory {
         fun create(roomUid: Long): SendMessageViewModel
+    }
+
+    private val _error = MutableLiveData<Boolean>()
+    val error: LiveData<Boolean> = _error
+
+    init {
+        _error.value = false
     }
 
     companion object {
@@ -44,7 +48,12 @@ class SendMessageViewModel @AssistedInject constructor(
     fun sendPicture(photoUri: Uri, receiverUid: String, InputStream: InputStream) {
         viewModelScope.launch(Dispatchers.IO) {
 
-            messageRepository.sendPicture(roomUid, photoUri, receiverUid, InputStream)
+            try {
+                messageRepository.sendPicture(roomUid, photoUri, receiverUid, InputStream)
+            } catch (_: Exception) {
+                _error.postValue(true)
+                _error.postValue(false)
+            }
         }
     }
 }

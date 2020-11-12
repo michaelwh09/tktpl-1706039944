@@ -115,4 +115,5 @@ dependencies {
     kapt 'com.github.bumptech.glide:compiler:4.11.0'
 
     implementation "com.google.firebase:firebase-storage-ktx:19.2.0"
+    implementation 'com.firebaseui:firebase-ui-storage:7.0.0'
 }

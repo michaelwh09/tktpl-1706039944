@@ -9,7 +9,6 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.Room
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.FunctionRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.StorageRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import java.io.FileInputStream
 import java.io.InputStream
 import java.time.Instant
 import java.util.*
@@ -49,15 +48,16 @@ class MessageRepository
         functionRepository.sendMessageToUser(receiverUid, message)
     }
 
-    override suspend fun receiveMessage(roomUid: Long, message: String, senderUid: String, timestamp: Long) {
+    override suspend fun receiveMessage(roomUid: Long, message: String, senderUid: String, timestamp: Long,
+    isImage: Boolean) {
         val messageModel = Message(
             UUID.randomUUID().toString(),
             timestamp,
-            message,
+            if (isImage) null else message,
             true,
             roomUid,
-            false,
-            null,
+            isImage,
+            if (isImage) message else null,
         )
         messageDao.insertMessage(messageModel)
         val roomUpdate = RoomChatUpdateLastMessage(roomUid, message, timestamp)

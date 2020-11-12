@@ -18,6 +18,6 @@ class StorageRepository {
         task.error?.let {
             throw RuntimeException(it.message)
         }
-        return imageRef.path
+        return "gs://${imageRef.bucket}/${imageRef.path}"
     }
 }
