@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.Message
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.decodeSampledBitmapFromResource
 import java.time.Instant
 
 class PictureReceivedViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
@@ -22,11 +22,11 @@ class PictureReceivedViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
     fun bindTo(messageModel: Message?) {
         message = messageModel
         message?.let {
-            val contentResolver = pictureView.context.contentResolver
-            val filePicture = contentResolver.openInputStream(Uri.parse(it.uriPhoto))
-            val image = filePicture?.let { inputStream ->
-                decodeSampledBitmapFromResource(inputStream, 100, 100) }
-            pictureView.setImageBitmap(image)
+            val context = pictureView.context
+            Glide.with(context)
+                .load(Uri.parse(it.uriPhoto))
+                .centerCrop()
+                .into(pictureView)
             messageTimestamp.text = java.time.format.DateTimeFormatter.ISO_INSTANT.format(
                 Instant.ofEpochSecond(it.timestamp))
         }
