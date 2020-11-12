@@ -75,20 +75,21 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
             val isImage = remoteMessage.data["isImage"].toBoolean()
             if (message != null && sender!= null) {
                 Log.d("PESAN MASUK PESAN", message)
+                val messageClean = if (isImage) "Picture received" else message
                 scope.launch {
                     try {
                         val timestamp = Instant.now().epochSecond
                         val room = roomRepository.getUserRoom(sender)
                         if (room?.roomChat == null) {
-                            val roomId = roomRepository.createRoom(message, sender, emailSender)
+                            val roomId = roomRepository.createRoom(messageClean, sender, emailSender)
                             messageRepository.receiveMessage(roomId, message, sender, timestamp, isImage)
-                            sendNotification(message, roomId, sender, emailSender?:sender, timestamp)
+                            sendNotification(messageClean, roomId, sender, emailSender?:sender, timestamp)
                             return@launch
                         } else {
                             val roomId = room.roomChat.uid
-                            roomRepository.updateRoom(roomId, message)
+                            roomRepository.updateRoom(roomId, messageClean)
                             messageRepository.receiveMessage(roomId, message, sender, timestamp, isImage)
-                            sendNotification(message, roomId, room.user?.displayName ?:
+                            sendNotification(messageClean, roomId, room.user?.displayName ?:
                             sender, sender, timestamp)
                             return@launch
                         }

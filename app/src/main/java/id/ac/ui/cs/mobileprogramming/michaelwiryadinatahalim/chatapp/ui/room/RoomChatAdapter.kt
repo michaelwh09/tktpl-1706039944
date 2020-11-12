@@ -6,6 +6,8 @@ import android.widget.TextView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.UserAndRoomChatNullable
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.RecyclerViewOnClickListener
@@ -22,7 +24,8 @@ class RoomChatAdapter: PagingDataAdapter<UserAndRoomChatNullable, RoomChatAdapte
 
         fun bindTo(user: UserAndRoomChatNullable?, itemClickListener: RecyclerViewOnClickListener<UserAndRoomChatNullable>?) {
             userAndRoomChat = user
-            nameView.text = userAndRoomChat?.user?.displayName?: userAndRoomChat?.roomChat?.userUid
+            nameView.text = userAndRoomChat?.user?.displayName?: userAndRoomChat?.roomChat?.userEmailTemp?:
+                    userAndRoomChat?.roomChat?.userUid
             lastMessage.text = userAndRoomChat?.roomChat?.lastMessage?: ""
             userAndRoomChat?.roomChat?.lastMessageTimestamp?.let {
                 lastMessageTimestamp.text = java.time.format.DateTimeFormatter.ISO_INSTANT
