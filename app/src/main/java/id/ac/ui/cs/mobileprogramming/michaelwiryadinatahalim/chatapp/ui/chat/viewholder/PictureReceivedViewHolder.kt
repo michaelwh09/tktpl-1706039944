@@ -1,5 +1,6 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.chat.viewholder
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -23,9 +24,9 @@ class PictureReceivedViewHolder(parent: ViewGroup): RecyclerView.ViewHolder(
     fun bindTo(messageModel: Message?) {
         message = messageModel
         message?.let {
-            it.message?.let {
-                    message ->
-                val gs = storage.getReferenceFromUrl(message)
+            it.uriPhoto?.let {
+                    uriPhoto ->
+                val gs = storage.getReferenceFromUrl(uriPhoto)
                 val context = pictureView.context
                 GlideApp.with(context)
                     .load(gs)
