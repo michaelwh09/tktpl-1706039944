@@ -1,5 +1,6 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db
 
+import android.net.Uri
 import androidx.paging.PagingSource
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.MessageDao
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.RoomChatDao
@@ -34,7 +35,9 @@ class MessageRepository
             timestamp,
             message,
             false,
-            roomUid
+            roomUid,
+            false,
+            null,
         )
         val roomUpdate = RoomChatUpdateLastMessage(roomUid, message, timestamp)
         messageDao.insertMessage(messageModel)
@@ -48,8 +51,32 @@ class MessageRepository
             timestamp,
             message,
             true,
-            roomUid
+            roomUid,
+            false,
+            null,
         )
         messageDao.insertMessage(messageModel)
+        val roomUpdate = RoomChatUpdateLastMessage(roomUid, message, timestamp)
+        roomDao.updateLastMessageWithoutUnread(roomUpdate)
+    }
+
+    override suspend fun sendPicture(roomUid: Long, photoUri: Uri, receiverUid: String) {
+        val timestamp = Instant.now().epochSecond
+        sendPicture(roomUid, photoUri, receiverUid, timestamp)
+    }
+
+    override suspend fun sendPicture(roomUid: Long, photoUri: Uri, receiverUid: String, timestamp: Long) {
+        val messageModel = Message(
+            UUID.randomUUID().toString(),
+            timestamp,
+            null,
+            false,
+            roomUid,
+            true,
+            photoUri.toString(),
+        )
+        messageDao.insertMessage(messageModel)
+        val roomUpdate = RoomChatUpdateLastMessage(roomUid, "Photo sent", timestamp)
+        roomDao.updateLastMessageWithoutUnread(roomUpdate)
     }
 }

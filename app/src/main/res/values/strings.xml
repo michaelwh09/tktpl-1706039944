@@ -6,4 +6,5 @@
     <string name="chats">chats</string>
     <string name="enter_message">Enter message</string>
     <string name="default_notification_channel_id">id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp</string>
+    <string name="image_description">my image</string>
 </resources>
