@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.FcmRepository
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.LoginRepository
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.StorageRepository
 
 
 @Module
@@ -20,5 +21,10 @@ object FirebaseModule {
     @Provides
     fun provideFcmRepository() : FcmRepository {
         return FcmRepository()
+    }
+
+    @Provides
+    fun provideStorageRepository() : StorageRepository {
+        return StorageRepository()
     }
 }

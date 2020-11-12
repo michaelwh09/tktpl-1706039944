@@ -43,7 +43,21 @@ class FunctionRepository {
     suspend fun sendMessageToUser(receiverUid: String, message: String): Boolean {
         val data = hashMapOf(
             "receiverUid" to receiverUid,
-            "message" to message
+            "message" to message,
+            "isImage" to false
+        )
+        return functions
+            .getHttpsCallable("sendMessageToUser")
+            .call(data)
+            .continueWith {task -> task.result?.data as Boolean}
+            .await()
+    }
+
+    suspend fun sendPictureToUser(receiverUid: String, path: String): Boolean {
+        val data = hashMapOf(
+            "receiverUid" to receiverUid,
+            "message" to path,
+            "isImage" to true
         )
         return functions
             .getHttpsCallable("sendMessageToUser")

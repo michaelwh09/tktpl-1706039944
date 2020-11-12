@@ -7,7 +7,10 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.RoomCha
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.Message
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.RoomChatUpdateLastMessage
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.FunctionRepository
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.StorageRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import java.io.FileInputStream
+import java.io.InputStream
 import java.time.Instant
 import java.util.*
 import javax.inject.Inject
@@ -18,6 +21,7 @@ class MessageRepository
     private val messageDao: MessageDao,
     private val roomDao: RoomChatDao,
     private val functionRepository: FunctionRepository,
+    private val storageRepository: StorageRepository
 ): IMessageRepository {
 
     override fun getAllMessagesByRoomUid(roomUid: Long): PagingSource<Int, Message> {
@@ -60,12 +64,15 @@ class MessageRepository
         roomDao.updateLastMessageWithoutUnread(roomUpdate)
     }
 
-    override suspend fun sendPicture(roomUid: Long, photoUri: Uri, receiverUid: String) {
+    override suspend fun sendPicture(roomUid: Long, photoUri: Uri, receiverUid: String,
+                                     inputStream: InputStream
+    ) {
         val timestamp = Instant.now().epochSecond
-        sendPicture(roomUid, photoUri, receiverUid, timestamp)
+        sendPicture(roomUid, photoUri, receiverUid, timestamp, inputStream)
     }
 
-    override suspend fun sendPicture(roomUid: Long, photoUri: Uri, receiverUid: String, timestamp: Long) {
+    private suspend fun sendPicture(roomUid: Long, photoUri: Uri, receiverUid: String, timestamp: Long,
+    inputStream: InputStream) {
         val messageModel = Message(
             UUID.randomUUID().toString(),
             timestamp,
@@ -78,5 +85,7 @@ class MessageRepository
         messageDao.insertMessage(messageModel)
         val roomUpdate = RoomChatUpdateLastMessage(roomUid, "Photo sent", timestamp)
         roomDao.updateLastMessageWithoutUnread(roomUpdate)
+        val url = storageRepository.uploadImage(receiverUid, inputStream)
+        functionRepository.sendPictureToUser(receiverUid, url)
     }
 }

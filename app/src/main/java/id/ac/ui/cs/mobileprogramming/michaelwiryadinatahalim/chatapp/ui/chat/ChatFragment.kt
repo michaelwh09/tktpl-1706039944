@@ -163,8 +163,14 @@ class ChatFragment : Fragment() {
         result: ActivityResult ->
 
         if (result.resultCode == Activity.RESULT_OK && result.resultCode != Activity.RESULT_CANCELED) {
-            sendMessageViewModel.sendPicture(currentPhotoUri,
-                (roomChat.user?.uid ?: roomChat.roomChat?.userUid)!!)
+            activity?.let {
+                val data = it.contentResolver.openInputStream(currentPhotoUri)
+                data?.let { inputStream ->
+                    sendMessageViewModel.sendPicture(currentPhotoUri,
+                        (roomChat.user?.uid ?: roomChat.roomChat?.userUid)!!, inputStream
+                    )
+                }
+            }
         }
     }
 

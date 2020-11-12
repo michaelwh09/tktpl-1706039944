@@ -1,6 +1,5 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.chat
 
-import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -11,8 +10,8 @@ import com.squareup.inject.assisted.AssistedInject
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IMessageRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
+import java.io.FileInputStream
+import java.io.InputStream
 
 class SendMessageViewModel @AssistedInject constructor(
     private val messageRepository: IMessageRepository,
@@ -42,10 +41,10 @@ class SendMessageViewModel @AssistedInject constructor(
         }
     }
 
-    fun sendPicture(photoUri: Uri, receiverUid: String) {
+    fun sendPicture(photoUri: Uri, receiverUid: String, InputStream: InputStream) {
         viewModelScope.launch(Dispatchers.IO) {
 
-            messageRepository.sendPicture(roomUid, photoUri, receiverUid)
+            messageRepository.sendPicture(roomUid, photoUri, receiverUid, InputStream)
         }
     }
 }

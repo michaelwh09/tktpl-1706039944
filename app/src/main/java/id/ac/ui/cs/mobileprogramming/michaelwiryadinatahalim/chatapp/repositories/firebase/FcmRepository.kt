@@ -16,13 +16,6 @@ class FcmRepository {
     private val fcm = Firebase.messaging
     private val analytic = Firebase.analytics
 
-    fun getFcmToken() : Flow<State<String>> = flow {
-        emit(State.loading())
-        emit(State.success(fcm.token.await()))
-    }.catch {
-        emit(State.failed(it))
-    }.flowOn(Dispatchers.IO)
-
     fun enableFcm() {
         fcm.isAutoInitEnabled = true
         analytic.setAnalyticsCollectionEnabled(true)
