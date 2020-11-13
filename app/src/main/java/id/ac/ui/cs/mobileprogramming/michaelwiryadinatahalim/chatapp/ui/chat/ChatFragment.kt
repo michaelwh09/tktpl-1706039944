@@ -143,7 +143,7 @@ class ChatFragment : Fragment() {
     private fun dispatchTakePictureIntent() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also {
             takePictureIntent ->
-            takePictureIntent.resolveActivity(activity!!.packageManager)?.also {
+            takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
                 val photoFile: File? = try {
                     createImageFile()
                 } catch (ex: IOException) {
