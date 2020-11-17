@@ -56,9 +56,8 @@ class MessageRepository
             if (isImage) message else null,
         )
         messageDao.insertMessage(messageModel)
-        val roomUpdate = RoomChatUpdateLastMessage(roomUid, message, timestamp)
+        val roomUpdate = RoomChatUpdateLastMessage(roomUid, if (isImage) "Picture received"
+        else message, timestamp)
         roomDao.updateLastMessageWithoutUnread(roomUpdate)
     }
-
-
 }
