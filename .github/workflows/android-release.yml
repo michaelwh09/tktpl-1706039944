@@ -10,7 +10,7 @@ jobs:
   build:
     name: Upload Release Asset
     runs-on: ubuntu-latest
-    container: circleci/android:api-28-node
+    container: circleci/android:api-29-node
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

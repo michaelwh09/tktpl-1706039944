@@ -10,7 +10,7 @@ jobs:
   build:
     name: Lint
     runs-on: self-hosted
-    container: circleci/android:api-28-node
+    container: circleci/android:api-29-node
     steps:
       - uses: actions/checkout@v2
       - name: Adding credential
