@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">chatapp</string>
     <string name="login_message">Login</string>
-    <string name="add_friend">add</string>
-    <string name="friends">friends</string>
-    <string name="chats">chats</string>
+    <string name="add_friend">Add friend</string>
+    <string name="friends">Friends</string>
+    <string name="chats">Chats</string>
     <string name="enter_message">Enter message</string>
     <string name="default_notification_channel_id">id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp</string>
     <string name="image_description">my image</string>

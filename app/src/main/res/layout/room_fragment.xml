@@ -18,6 +18,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_room"
+            app:title="@string/chats"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"

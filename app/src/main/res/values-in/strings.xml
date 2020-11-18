@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">chatapp</string>
+    <string name="login_message">Masuk</string>
+    <string name="add_friend">Tambah teman</string>
+    <string name="friends">Teman</string>
+    <string name="chats">Percakapan</string>
+    <string name="enter_message">Tulis pesan</string>
+    <string name="default_notification_channel_id">id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp</string>
+    <string name="image_description">foto saya</string>
+    <string name="image_wording_received">Foto diterima</string>
+    <string name="image_wording">Foto</string>
+</resources>
