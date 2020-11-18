@@ -9,7 +9,7 @@ import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.Mess
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.RoomChat
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.User
 
-@Database(entities = [User::class, RoomChat::class, Message::class], version = 1, exportSchema = false)
+@Database(entities = [User::class, RoomChat::class, Message::class], version = 1)
 abstract class ChatAppDatabase : RoomDatabase() {
 
     abstract fun friendDao() : FriendDao
