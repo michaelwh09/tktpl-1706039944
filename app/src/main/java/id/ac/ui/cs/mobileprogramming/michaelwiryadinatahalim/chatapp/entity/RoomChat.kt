@@ -1,12 +1,10 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 
 @Entity(tableName = "room_chat_table", foreignKeys = [ForeignKey(entity = User::class,
-    parentColumns = ["uid"], childColumns = ["user_uid"], onDelete = ForeignKey.CASCADE)])
+    parentColumns = ["uid"], childColumns = ["user_uid"], onDelete = ForeignKey.CASCADE)],
+    indices = [Index(value = ["user_email_temp"], unique = true)])
 data class RoomChat(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "uid") val uid: Long,
     @ColumnInfo(name = "last_message") val lastMessage: String?,

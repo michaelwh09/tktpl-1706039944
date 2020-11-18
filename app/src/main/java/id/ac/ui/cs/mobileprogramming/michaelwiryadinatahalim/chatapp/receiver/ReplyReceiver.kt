@@ -34,7 +34,6 @@ class ReplyReceiver : BroadcastReceiver() {
             val replyText = getMessageText(intent).toString()
             val data = intent.getParcelableExtra<NotificationModel>(
                 "id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.notification.data")!!
-            Log.d(TAG, replyText)
             val timestamp = Instant.now().epochSecond
             data.repliedMessage.add(ReplyMessage(replyText, timestamp))
             GlobalScope.launch(Dispatchers.IO) {

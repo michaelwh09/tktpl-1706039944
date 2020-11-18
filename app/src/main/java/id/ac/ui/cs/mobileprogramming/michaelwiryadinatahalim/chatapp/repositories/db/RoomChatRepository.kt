@@ -4,13 +4,15 @@ import androidx.paging.PagingSource
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.RoomChatDao
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.RoomChat
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.RoomChatUpdateLastMessage
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.User
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.UserAndRoomChatNullable
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 import javax.inject.Inject
 
 class RoomChatRepository @Inject constructor(
-    private val roomChatDao: RoomChatDao
+    private val roomChatDao: RoomChatDao,
+    private val userRepository: IFriendRepository
 ): IRoomChatRepository {
 
     override fun getAllRoomsChat(): PagingSource<Int, UserAndRoomChatNullable> {
@@ -30,8 +32,9 @@ class RoomChatRepository @Inject constructor(
         return roomChatDao.getRoomByUserUid(senderUid)
     }
 
-    override suspend fun createRoom(latestMessage: String, senderUid: String, senderEmail: String?): Long {
+    override suspend fun createRoomAndUser(latestMessage: String, senderUid: String, senderEmail: String?): Long {
         val timestamp = Instant.now().epochSecond
+        userRepository.addFriend(User(senderUid, senderEmail?:senderUid, senderEmail?:senderUid))
         return roomChatDao.insertSingleRoom(
             RoomChat(0, latestMessage, timestamp, 0,
                 senderUid, senderEmail, false))

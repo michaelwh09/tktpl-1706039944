@@ -4,10 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IMessageRepository
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.IRoomChatRepository
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.MessageRepository
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.RoomChatRepository
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.db.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
@@ -16,8 +13,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 interface ApplicationRepositoryModule {
 
     @Binds
-    abstract fun bindRoomChatRepository(roomChatRepository: RoomChatRepository): IRoomChatRepository
+    fun bindRoomChatRepository(roomChatRepository: RoomChatRepository): IRoomChatRepository
 
     @Binds
-    abstract fun bindMessageRepository(messageRepository: MessageRepository): IMessageRepository
+    fun bindMessageRepository(messageRepository: MessageRepository): IMessageRepository
+
+    @Binds
+    fun bindFriendRepository(friendRepository: FriendRepository): IFriendRepository
 }

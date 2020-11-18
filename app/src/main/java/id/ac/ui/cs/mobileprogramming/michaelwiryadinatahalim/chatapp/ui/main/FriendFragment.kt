@@ -83,11 +83,9 @@ class FriendFragment : Fragment(), RecyclerViewOnClickListener<UserAndRoomChat> 
                 .setPositiveButton("Chat") { dialog, _ ->
                     dialog.dismiss()
                     if (data.roomChat == null) {
-                        Log.d("FriendFragment", data.toString())
                         friendRoomViewModel.createNewRoomForUser(data.user.uid)
                         friendRoomViewModel.roomUid.observe(viewLifecycleOwner, { roomUid ->
                             if (roomUid != null) {
-                                Log.d("FriendFragmentNavigate", roomUid.toString())
                                 navigateToChatRoom(roomUid)
                             }
                         })

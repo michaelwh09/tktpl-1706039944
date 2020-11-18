@@ -69,7 +69,6 @@ class AddFragment : Fragment() {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val email = add_email_field.text?.trim().toString()
                 if (email.isValidEmail()) {
-                    Log.d("Add Fragment", "Email input: $email")
                     add_email_field?.clearFocus()
                     add_email_field.hideKeyboard()
                     add_email_input_layout.isErrorEnabled = false
@@ -98,7 +97,7 @@ class AddFragment : Fragment() {
                 is State.Loading -> showLoading()
                 is State.Failed -> {
                     hideLoading()
-                    Log.d(TAG, it.throwable.message?: "unknown")
+                    Log.e(TAG, it.throwable.message?: "unknown")
                 }
                 is State.Initialized -> hideLoading()
             }

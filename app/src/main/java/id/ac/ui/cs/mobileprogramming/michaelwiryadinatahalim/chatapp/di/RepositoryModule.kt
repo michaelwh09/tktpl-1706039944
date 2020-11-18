@@ -16,9 +16,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 abstract class RepositoryModule {
 
     @Binds
-    abstract fun bindFriendRepository(friendRepository: FriendRepository): IFriendRepository
-
-    @Binds
     abstract fun bindPictureMessageRepository(pictureMessageRepository: PictureMessageRepository):
             IPictureMessageRepository
 

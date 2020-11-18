@@ -14,7 +14,7 @@ interface IRoomChatRepository {
 
     suspend fun getUserRoom(senderUid: String): UserAndRoomChatNullable?
 
-    suspend fun createRoom(latestMessage: String, senderUid: String, senderEmail: String?) : Long
+    suspend fun createRoomAndUser(latestMessage: String, senderUid: String, senderEmail: String?) : Long
 
     fun updateRoom(roomUid: Long, latestMessage: String,  timestamp: Long, isLastMessagePicture: Boolean)
 }

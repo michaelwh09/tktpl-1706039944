@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "081f026f0ce26b23db36132de6f893fc",
+    "identityHash": "36ee6df2485a8614910a2a329c5c6334",
     "entities": [
       {
         "tableName": "user_table",
@@ -99,6 +99,14 @@
           "autoGenerate": true
         },
         "indices": [
+          {
+            "name": "index_room_chat_table_user_email_temp",
+            "unique": true,
+            "columnNames": [
+              "user_email_temp"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_room_chat_table_user_email_temp` ON `${TABLE_NAME}` (`user_email_temp`)"
+          },
           {
             "name": "index_room_chat_table_user_uid",
             "unique": false,
@@ -204,7 +212,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '081f026f0ce26b23db36132de6f893fc')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '36ee6df2485a8614910a2a329c5c6334')"
     ]
   }
 }

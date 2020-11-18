@@ -70,7 +70,6 @@ class ChatFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d("CHATFRAG", args.roomUid.toString())
         return inflater.inflate(R.layout.chat_fragment, container, false)
     }
 
@@ -112,7 +111,6 @@ class ChatFragment : Fragment() {
         }
 
         roomInfoViewModel.roomInfo.observe(viewLifecycleOwner, {
-            Log.d("CHATFRAGMENT", it.toString())
             if (it != null) {
                 toolbar_chat.title = it.user?.displayName ?: it.roomChat?.userEmailTemp?: it.roomChat?.userUid
                 roomChat = it

@@ -55,7 +55,6 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
         val auth = Firebase.auth
         auth.currentUser?.let {
             saveTokenToFirestore(it, token)
-            Log.d(TAG, "Refreshed token FCM: $token")
         }
     }
 
@@ -74,14 +73,13 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
             val emailSender = remoteMessage.data["senderEmail"]
             val isImage = remoteMessage.data["isImage"].toBoolean()
             if (message != null && sender!= null) {
-                Log.d("PESAN MASUK PESAN", message)
                 val messageClean = if (isImage) getString(R.string.image_wording_received) else message
                 scope.launch {
                     try {
                         val timestamp = Instant.now().epochSecond
                         val room = roomRepository.getUserRoom(sender)
                         if (room?.roomChat == null) {
-                            val roomId = roomRepository.createRoom(messageClean, sender, emailSender)
+                            val roomId = roomRepository.createRoomAndUser(messageClean, sender, emailSender)
                             messageRepository.receiveMessage(roomId, message, sender, timestamp, isImage)
                             sendNotification(messageClean, roomId, emailSender?:sender, sender, timestamp)
                             return@launch
