@@ -9,7 +9,7 @@ name: Upload Release Asset
 jobs:
   build:
     name: Upload Release Asset
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     container: circleci/android:api-29-node
     steps:
       - name: Checkout code
