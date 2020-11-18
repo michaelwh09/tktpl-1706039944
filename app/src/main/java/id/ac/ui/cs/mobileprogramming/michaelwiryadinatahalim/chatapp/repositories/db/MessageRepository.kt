@@ -2,9 +2,7 @@ package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositori
 
 import androidx.paging.PagingSource
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.MessageDao
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.dao.RoomChatDao
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.Message
-import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.RoomChatUpdateLastMessage
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.repositories.firebase.FunctionRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.time.Instant
@@ -15,7 +13,7 @@ import javax.inject.Inject
 class MessageRepository
 @Inject constructor(
     private val messageDao: MessageDao,
-    private val roomDao: RoomChatDao,
+    private val roomChatRepository: IRoomChatRepository,
     private val functionRepository: FunctionRepository,
 ): IMessageRepository {
 
@@ -38,9 +36,8 @@ class MessageRepository
             false,
             null,
         )
-        val roomUpdate = RoomChatUpdateLastMessage(roomUid, message, timestamp)
         messageDao.insertMessage(messageModel)
-        roomDao.updateLastMessageWithoutUnread(roomUpdate)
+        roomChatRepository.updateRoom(roomUid, message, timestamp, false)
         functionRepository.sendMessageToUser(receiverUid, message)
     }
 
@@ -56,8 +53,6 @@ class MessageRepository
             if (isImage) message else null,
         )
         messageDao.insertMessage(messageModel)
-        val roomUpdate = RoomChatUpdateLastMessage(roomUid, if (isImage) "Picture received"
-        else message, timestamp)
-        roomDao.updateLastMessageWithoutUnread(roomUpdate)
+        roomChatRepository.updateRoom(roomUid, message, timestamp, isImage)
     }
 }

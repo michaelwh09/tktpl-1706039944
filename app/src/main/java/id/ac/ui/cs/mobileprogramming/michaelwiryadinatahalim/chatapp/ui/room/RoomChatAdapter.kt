@@ -24,7 +24,8 @@ class RoomChatAdapter: PagingDataAdapter<UserAndRoomChatNullable, RoomChatAdapte
             userAndRoomChat = user
             nameView.text = userAndRoomChat?.user?.displayName?: userAndRoomChat?.roomChat?.userEmailTemp?:
                     userAndRoomChat?.roomChat?.userUid
-            lastMessage.text = userAndRoomChat?.roomChat?.lastMessage?: ""
+            lastMessage.text = if (userAndRoomChat?.roomChat?.isLastMessagePicture == true) itemView.context
+                .getString(R.string.image_wording) else userAndRoomChat?.roomChat?.lastMessage
             userAndRoomChat?.roomChat?.lastMessageTimestamp?.let {
                 lastMessageTimestamp.text = java.time.format.DateTimeFormatter.ISO_INSTANT
                     .format(java.time.Instant.ofEpochSecond(it))

@@ -16,5 +16,5 @@ interface IRoomChatRepository {
 
     suspend fun createRoom(latestMessage: String, senderUid: String, senderEmail: String?) : Long
 
-    fun updateRoom(roomUid: Long, latestMessage: String)
+    fun updateRoom(roomUid: Long, latestMessage: String,  timestamp: Long, isLastMessagePicture: Boolean)
 }

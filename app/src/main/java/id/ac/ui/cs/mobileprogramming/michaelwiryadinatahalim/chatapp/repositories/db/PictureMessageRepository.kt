@@ -36,7 +36,7 @@ class PictureMessageRepository
             photoUri.toString(),
         )
         messageDao.insertMessage(messageModel)
-        val roomUpdate = RoomChatUpdateLastMessage(roomUid, "Photo sent", timestamp)
+        val roomUpdate = RoomChatUpdateLastMessage(roomUid, "Photo sent", timestamp, true)
         roomDao.updateLastMessageWithoutUnread(roomUpdate)
         val url = storageRepository.uploadImage(receiverUid, inputStream)
         functionRepository.sendPictureToUser(receiverUid, url)
