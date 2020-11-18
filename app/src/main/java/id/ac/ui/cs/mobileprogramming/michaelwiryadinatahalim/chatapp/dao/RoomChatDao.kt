@@ -19,7 +19,8 @@ interface RoomChatDao {
         R.last_message_timestamp AS room_last_message_timestamp,
         R.unread_message AS room_unread_message,
         R.user_uid AS room_user_uid,
-        R.user_email_temp AS room_user_email_temp
+        R.user_email_temp AS room_user_email_temp,
+        R.is_last_message_picture AS room_is_last_message_picture
         FROM ROOM_CHAT_TABLE AS R LEFT JOIN user_table AS U ORDER BY R.last_message_timestamp DESC""")
     fun getAllRoomsChatAndFriend() : PagingSource<Int, UserAndRoomChatNullable>
 
@@ -32,7 +33,8 @@ interface RoomChatDao {
         R.last_message_timestamp AS room_last_message_timestamp,
         R.unread_message AS room_unread_message,
         R.user_uid AS room_user_uid,
-        R.user_email_temp AS room_user_email_temp
+        R.user_email_temp AS room_user_email_temp,
+        R.is_last_message_picture AS room_is_last_message_picture
         FROM ROOM_CHAT_TABLE AS R LEFT JOIN user_table AS U WHERE R.uid == :uid""")
     fun getRoomByUid(uid: Long): Flow<UserAndRoomChatNullable?>
 
@@ -45,7 +47,8 @@ interface RoomChatDao {
         R.last_message_timestamp AS room_last_message_timestamp,
         R.unread_message AS room_unread_message,
         R.user_uid AS room_user_uid, 
-        R.user_email_temp AS room_user_email_temp
+        R.user_email_temp AS room_user_email_temp,
+        R.is_last_message_picture AS room_is_last_message_picture
         FROM ROOM_CHAT_TABLE AS R LEFT JOIN user_table AS U ON U.uid = R.user_uid WHERE R.user_uid == :userUid""")
     suspend fun getRoomByUserUid(userUid: String): UserAndRoomChatNullable?
 }
