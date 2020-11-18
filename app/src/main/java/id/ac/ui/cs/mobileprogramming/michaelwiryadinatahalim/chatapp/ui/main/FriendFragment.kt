@@ -1,6 +1,7 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -82,9 +83,11 @@ class FriendFragment : Fragment(), RecyclerViewOnClickListener<UserAndRoomChat> 
                 .setPositiveButton("Chat") { dialog, _ ->
                     dialog.dismiss()
                     if (data.roomChat == null) {
+                        Log.d("FriendFragment", data.toString())
                         friendRoomViewModel.createNewRoomForUser(data.user.uid)
                         friendRoomViewModel.roomUid.observe(viewLifecycleOwner, { roomUid ->
                             if (roomUid != null) {
+                                Log.d("FriendFragmentNavigate", roomUid.toString())
                                 navigateToChatRoom(roomUid)
                             }
                         })

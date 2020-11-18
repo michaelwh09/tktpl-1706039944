@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "526e44ec7a6491f12b00d2dc7d63eadd",
+    "identityHash": "081f026f0ce26b23db36132de6f893fc",
     "entities": [
       {
         "tableName": "user_table",
@@ -47,7 +47,7 @@
       },
       {
         "tableName": "room_chat_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `last_message` TEXT, `last_message_timestamp` INTEGER, `unread_message` INTEGER, `user_uid` TEXT, `user_email_temp` TEXT, `is_last_message_picture` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `last_message` TEXT, `last_message_timestamp` INTEGER, `unread_message` INTEGER, `user_uid` TEXT, `user_email_temp` TEXT, `is_last_message_picture` INTEGER, FOREIGN KEY(`user_uid`) REFERENCES `user_table`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "uid",
@@ -98,12 +98,33 @@
           ],
           "autoGenerate": true
         },
-        "indices": [],
-        "foreignKeys": []
+        "indices": [
+          {
+            "name": "index_room_chat_table_user_uid",
+            "unique": false,
+            "columnNames": [
+              "user_uid"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_room_chat_table_user_uid` ON `${TABLE_NAME}` (`user_uid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "user_table",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "user_uid"
+            ],
+            "referencedColumns": [
+              "uid"
+            ]
+          }
+        ]
       },
       {
         "tableName": "message_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `message` TEXT, `is_received` INTEGER NOT NULL, `room_chat_uid` INTEGER NOT NULL, `is_image` INTEGER NOT NULL DEFAULT 0, `photo` TEXT, PRIMARY KEY(`uid`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`uid` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `message` TEXT, `is_received` INTEGER NOT NULL, `room_chat_uid` INTEGER NOT NULL, `is_image` INTEGER NOT NULL DEFAULT 0, `photo` TEXT, PRIMARY KEY(`uid`), FOREIGN KEY(`room_chat_uid`) REFERENCES `room_chat_table`(`uid`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "uid",
@@ -155,14 +176,35 @@
           ],
           "autoGenerate": false
         },
-        "indices": [],
-        "foreignKeys": []
+        "indices": [
+          {
+            "name": "index_message_table_room_chat_uid",
+            "unique": false,
+            "columnNames": [
+              "room_chat_uid"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_message_table_room_chat_uid` ON `${TABLE_NAME}` (`room_chat_uid`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "room_chat_table",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "room_chat_uid"
+            ],
+            "referencedColumns": [
+              "uid"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '526e44ec7a6491f12b00d2dc7d63eadd')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '081f026f0ce26b23db36132de6f893fc')"
     ]
   }
 }
