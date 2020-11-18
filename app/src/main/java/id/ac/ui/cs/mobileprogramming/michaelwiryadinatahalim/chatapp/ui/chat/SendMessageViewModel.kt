@@ -42,8 +42,12 @@ class SendMessageViewModel @AssistedInject constructor(
 
     fun sendMessage(message: String, receiverUid: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d("Send message", "$message, $receiverUid")
-            messageRepository.sendMessage(roomUid, message, receiverUid)
+            try {
+                messageRepository.sendMessage(roomUid, message, receiverUid)
+            } catch (_: Exception) {
+                _error.postValue(true)
+                _error.postValue(false)
+            }
         }
     }
 

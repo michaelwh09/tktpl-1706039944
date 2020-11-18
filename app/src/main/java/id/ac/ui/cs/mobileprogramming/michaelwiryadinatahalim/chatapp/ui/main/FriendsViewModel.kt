@@ -19,7 +19,7 @@ class FriendsViewModel @ViewModelInject constructor(
         PagingConfig(
             pageSize = 30,
             enablePlaceholders = true,
-            maxSize = 100
+            maxSize = 90
         )
     ) {
         friendRepository.getAllAddedFriends()
