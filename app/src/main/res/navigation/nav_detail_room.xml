@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/ChatFragment"
+    android:id="@+id/nav_detail_graph">
+
+    <fragment
+        android:id="@+id/ChatFragment"
+        android:name="id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.chat.ChatFragment"
+        android:label="chat fragment"
+        tools:layout="@layout/chat_fragment">
+        <argument
+            android:name="roomUid"
+            android:defaultValue="0L"
+            app:argType="long" />
+
+    </fragment>
+</navigation>

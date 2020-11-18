@@ -16,6 +16,15 @@
             app:destination="@id/AddFragment"/>
 
         <action
+            android:id="@+id/action_FirstFragment_to_room_tablet"
+            app:destination="@id/RoomFragment">
+            <argument
+                android:name="roomUid"
+                android:defaultValue="0L"
+                app:argType="long" />
+        </action>
+
+        <action
             android:id="@+id/action_FirstFragment_to_Chat"
             app:destination="@id/ChatFragment">
             <argument
@@ -30,6 +39,11 @@
         android:name="id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.room.RoomFragment"
         android:label="room fragment"
         tools:layout="@layout/room_fragment">
+
+        <argument
+            android:name="roomUid"
+            android:defaultValue="0L"
+            app:argType="long" />
 
         <action
             android:id="@+id/action_RoomFragment_to_Chat"

@@ -52,7 +52,7 @@ fun createNotification(
     bundle.putLong("roomUid", data.roomUid)
     val pendingIntent = NavDeepLinkBuilder(context)
         .setGraph(R.navigation.nav_graph)
-        .setDestination(R.id.ChatFragment)
+        .setDestination(if (context.resources.getBoolean(R.bool.isTablet)) R.id.RoomFragment else  R.id.ChatFragment)
         .setArguments(bundle)
         .setComponentName(MainActivity::class.java)
         .createPendingIntent()

@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.paging.LoadState
@@ -16,6 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.UserAndRoomChat
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.room.RoomFragmentDirections
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.RecyclerViewOnClickListener
 import kotlinx.android.synthetic.main.friend_fragment.*
 import kotlinx.coroutines.flow.collectLatest
@@ -62,7 +64,13 @@ class FriendFragment : Fragment(), RecyclerViewOnClickListener<UserAndRoomChat> 
     }
 
     private fun navigateToChatRoom(roomUid: Long) {
-        val action = FriendFragmentDirections.actionFirstFragmentToChat(roomUid)
+        val isTablet = requireContext().resources.getBoolean(R.bool.isTablet)
+        val action:NavDirections
+        action = if (isTablet) {
+            FriendFragmentDirections.actionFirstFragmentToRoomTablet(roomUid)
+        } else {
+            FriendFragmentDirections.actionFirstFragmentToChat(roomUid)
+        }
         findNavController().navigate(action)
     }
 
