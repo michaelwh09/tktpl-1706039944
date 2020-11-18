@@ -83,13 +83,13 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
                         if (room?.roomChat == null) {
                             val roomId = roomRepository.createRoom(messageClean, sender, emailSender)
                             messageRepository.receiveMessage(roomId, message, sender, timestamp, isImage)
-                            sendNotification(messageClean, roomId, sender, emailSender?:sender, timestamp)
+                            sendNotification(messageClean, roomId, emailSender?:sender, sender, timestamp)
                             return@launch
                         } else {
                             val roomId = room.roomChat.uid
                             messageRepository.receiveMessage(roomId, message, sender, timestamp, isImage)
                             sendNotification(messageClean, roomId, room.user?.displayName ?:
-                            sender, sender, timestamp)
+                            emailSender?:sender, sender, timestamp)
                             return@launch
                         }
                     } catch (e: Exception) {
@@ -111,7 +111,7 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
         return (applicationContext.getSystemService(KEYGUARD_SERVICE) as KeyguardManager).isKeyguardLocked
     }
 
-    private fun sendNotification(messageBody: String, roomUid: Long, senderName: String?, senderUid: String, timestamp: Long) {
+    private fun sendNotification(messageBody: String, roomUid: Long, senderName: String, senderUid: String, timestamp: Long) {
         if (! shouldShowNotification()) return
         val style = NotificationCompat.MessagingStyle(
             Person.Builder().setName(senderName)
@@ -124,7 +124,7 @@ class MessageFirebaseMessagingService : FirebaseMessagingService() {
             )
         val notification = createNotification(
             applicationContext, style,
-            NotificationModel(roomUid, senderName?:senderUid,
+            NotificationModel(roomUid, senderName,
                 messageBody, timestamp, senderUid, ArrayList())
         )
         val channelId = getString(R.string.default_notification_channel_id)
