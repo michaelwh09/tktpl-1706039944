@@ -2,13 +2,16 @@ package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.chat
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +33,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.entity.UserAndRoomChatNullable
+import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.utils.connectivity.ConnectivityProvider
 import kotlinx.android.synthetic.main.chat_fragment.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -40,7 +44,7 @@ import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ChatFragment : Fragment() {
+class ChatFragment : Fragment(), ConnectivityProvider.ConnectivityStateListener {
 
     private val args: ChatFragmentArgs by navArgs()
 
@@ -58,6 +62,10 @@ class ChatFragment : Fragment() {
     private lateinit var roomChat: UserAndRoomChatNullable
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    private lateinit var connectivityManager: ConnectivityManager
+
+    private val provider: ConnectivityProvider by lazy { ConnectivityProvider.createProvider(requireContext()) }
 
     private val sendMessageViewModel: SendMessageViewModel by navGraphViewModels(R.id.ChatFragment) {
         SendMessageViewModel.provideFactory(
@@ -79,6 +87,7 @@ class ChatFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        connectivityManager = requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return inflater.inflate(R.layout.chat_fragment, container, false)
     }
 
@@ -246,5 +255,31 @@ class ChatFragment : Fragment() {
             ".jpg", /* suffix */
             storageDir /* directory */
         )
+    }
+
+    override fun onStateChange(state: ConnectivityProvider.NetworkState) {
+        if (state.hasInternet()) {
+            button_send_message.isEnabled = true
+            button_location.isEnabled = true
+            button_camera.isEnabled = true
+        } else {
+            button_send_message.isEnabled = false
+            button_location.isEnabled = false
+            button_camera.isEnabled = false
+        }
+    }
+
+    private fun ConnectivityProvider.NetworkState.hasInternet(): Boolean {
+        return (this as? ConnectivityProvider.NetworkState.ConnectedState)?.hasInternet == true
+    }
+
+    override fun onStart() {
+        super.onStart()
+        provider.addListener(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        provider.removeListener(this)
     }
 }
