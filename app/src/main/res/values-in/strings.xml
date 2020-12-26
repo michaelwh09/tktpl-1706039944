@@ -9,4 +9,6 @@
     <string name="image_description">foto saya</string>
     <string name="image_wording_received">Foto diterima</string>
     <string name="image_wording">Foto</string>
+    <string name="location_permission_needed_title">Akses Lokasi Diperlukan</string>
+    <string name="location_permission_needed_body">Akses lokasi diperlukan untuk mendapatkan data longitude dan latitude data</string>
 </resources>

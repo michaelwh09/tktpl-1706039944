@@ -9,4 +9,7 @@
     <string name="image_description">my image</string>
     <string name="image_wording_received">Picture received</string>
     <string name="image_wording">Picture</string>
+    <string name="location_permission_needed_title">Location Permission Needed</string>
+    <string name="location_permission_needed_body">Permission location needed to access fine location and send
+        longitude and latitude data</string>
 </resources>

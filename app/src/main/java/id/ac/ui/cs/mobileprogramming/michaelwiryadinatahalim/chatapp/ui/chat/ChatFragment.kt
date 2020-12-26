@@ -1,17 +1,20 @@
 package id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.chat
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -20,6 +23,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.R
@@ -51,6 +57,8 @@ class ChatFragment : Fragment() {
 
     private lateinit var roomChat: UserAndRoomChatNullable
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     private val sendMessageViewModel: SendMessageViewModel by navGraphViewModels(R.id.ChatFragment) {
         SendMessageViewModel.provideFactory(
             sendMessageViewModelAssistedFactory, args.roomUid
@@ -70,6 +78,7 @@ class ChatFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         return inflater.inflate(R.layout.chat_fragment, container, false)
     }
 
@@ -139,6 +148,32 @@ class ChatFragment : Fragment() {
                 ).show()
             }
         })
+
+        button_location.setOnClickListener {
+            when (PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) -> {
+                    sendLocation()
+                }
+                else -> {
+                    // You can directly ask for the permission.
+                    // The registered ActivityResultCallback gets the result of this request.
+                    requestPermissionLauncher.launch(
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                }
+            }
+        }
+    }
+    
+    private fun sendLocation() {
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            location?.let {
+                sendMessageViewModel.sendMessage("Longitude: ${it.longitude}, Latitude: ${it.latitude}",
+                    (roomChat.user?.uid ?: roomChat.roomChat?.userUid)!!)
+            }
+        }
     }
     
     private fun dispatchTakePictureIntent() {
@@ -183,6 +218,23 @@ class ChatFragment : Fragment() {
             }
         }
     }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                sendLocation()
+            } else {
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(getString(R.string.location_permission_needed_title))
+                    .setMessage(getString(R.string.location_permission_needed_body))
+                    .setPositiveButton("Ok") {
+                        dialog, _ -> dialog.dismiss()
+                    }
+                    .show()
+            }
+        }
 
     @Throws(IOException::class)
     private fun createImageFile(): File {
