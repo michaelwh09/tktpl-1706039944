@@ -11,7 +11,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +18,7 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -45,6 +45,13 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ChatFragment : Fragment(), ConnectivityProvider.ConnectivityStateListener {
+
+    companion object {
+        // Used to load the 'native-lib' library on application startup.
+        init {
+            System.loadLibrary("native-lib")
+        }
+    }
 
     private val args: ChatFragmentArgs by navArgs()
 
@@ -84,6 +91,8 @@ class ChatFragment : Fragment(), ConnectivityProvider.ConnectivityStateListener 
             roomInfoViewModelAssistedFactory, args.roomUid
         )
     }
+
+    external fun fibonacci(input: Long): Long
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
@@ -137,8 +146,14 @@ class ChatFragment : Fragment(), ConnectivityProvider.ConnectivityStateListener 
 
         button_send_message.setOnClickListener {
             add_message_field.text?.let { text ->
+                var message = text.trim().toString()
+                val command = message.split(" ")
+                if (command[0].equals("fib", ignoreCase = true) && command[1].isDigitsOnly()) {
+                    val result = fibonacci(command[1].toLong())
+                    message = "Fibonnaci ${command[1]} is $result"
+                }
                 sendMessageViewModel.sendMessage(
-                    text.trim().toString(),
+                    message,
                     (roomChat.user?.uid ?: roomChat.roomChat?.userUid)!!
                 )
                 add_message_field.text = null
