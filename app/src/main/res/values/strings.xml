@@ -12,4 +12,5 @@
     <string name="location_permission_needed_title">Location Permission Needed</string>
     <string name="location_permission_needed_body">Permission location needed to access fine location and send
         longitude and latitude data</string>
+    <string name="about">About</string>
 </resources>

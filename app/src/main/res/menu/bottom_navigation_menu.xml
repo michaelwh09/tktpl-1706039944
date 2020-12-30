@@ -10,4 +10,9 @@
         android:id="@+id/RoomFragment"
         android:title="@string/chats"
         android:icon="@drawable/ic_baseline_message_24"/>
+
+    <item
+        android:id="@+id/ABoutFragment"
+        android:title="@string/about"
+        android:icon="@drawable/ic_baseline_person_24"/>
 </menu>

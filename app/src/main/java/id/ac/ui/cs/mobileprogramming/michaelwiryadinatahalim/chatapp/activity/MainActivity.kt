@@ -24,7 +24,8 @@ class MainActivity : AppCompatActivity() {
             val navController = navFragment.findNavController()
             navController.addOnDestinationChangedListener { _, destination, _ ->
                 bottomNavigation.isVisible = (destination.id == R.id.FirstFragment
-                        || destination.id == R.id.RoomFragment)
+                        || destination.id == R.id.RoomFragment
+                        || destination.id == R.id.ABoutFragment)
             }
             NavigationUI.setupWithNavController(bottomNavigation, navController)
         }

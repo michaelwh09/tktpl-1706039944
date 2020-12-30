@@ -80,4 +80,8 @@
                 app:argType="long" />
 
         </fragment>
+
+    <fragment android:id="@+id/ABoutFragment"
+        android:name="id.ac.ui.cs.mobileprogramming.michaelwiryadinatahalim.chatapp.ui.about.AboutFragment"
+        android:label="about fragment"/>
 </navigation>
